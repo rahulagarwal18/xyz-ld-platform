@@ -112,6 +112,10 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', service: 'xyz L&D Email Server', timestamp: new Date() });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 xyz L&D Email Server running on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🚀 xyz L&D Email Server running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
