@@ -8,9 +8,9 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
-// EmailJS Credentials
+// EmailJS Credentials provided by user
 const EMAILJS_SERVICE_ID = process.env.EMAILJS_SERVICE_ID || 'service_ert6lhj';
-const EMAILJS_TEMPLATE_ID = process.env.EMAILJS_TEMPLATE_ID || '';
+const EMAILJS_TEMPLATE_ID = process.env.EMAILJS_TEMPLATE_ID || 'template_m1fgbz3';
 const EMAILJS_PUBLIC_KEY = process.env.EMAILJS_PUBLIC_KEY || '';
 
 // Resend API Key fallback
@@ -19,7 +19,7 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 async function sendToPhysicalGmailInbox({ to, subject, html, recipientName }) {
   console.log(`✉️ Dispatching Email Request for: [${to}] | Subject: "${subject}"`);
 
-  // 1. Try EmailJS API (Service ID: service_ert6lhj)
+  // 1. Try EmailJS API (service_ert6lhj + template_m1fgbz3)
   if (EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY) {
     try {
       const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
@@ -35,6 +35,7 @@ async function sendToPhysicalGmailInbox({ to, subject, html, recipientName }) {
             to_email: to,
             to_name: recipientName,
             subject: subject,
+            message: html,
             message_html: html,
             from_name: 'xyz Learning & Development Department'
           }
