@@ -2,255 +2,435 @@ import React, { useState } from 'react';
 import { useLD } from '../context/LDContext';
 import { Mail, Lock, User, UserPlus, LogIn, ArrowRight, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 
+const Field = ({ label, children }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, width: '100%' }}>
+    <label style={{ 
+      fontSize: 11, 
+      fontWeight: 700, 
+      color: '#00205B', 
+      textTransform: 'uppercase', 
+      letterSpacing: '0.5px' 
+    }}>
+      {label}
+    </label>
+    {children}
+  </div>
+);
+
+const IconInput = ({ icon: Icon, type = 'text', placeholder, value, onChange, suffix }) => {
+  const [focused, setFocused] = useState(false);
+  return (
+    <div style={{ 
+      position: 'relative', 
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center'
+    }}>
+      <div style={{
+        position: 'absolute',
+        left: 12,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        pointerEvents: 'none'
+      }}>
+        <Icon size={16} color={focused ? '#009CDE' : '#94A3B8'} style={{ transition: 'color 0.15s ease' }} />
+      </div>
+      <input
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        required
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        style={{
+          width: '100%', 
+          padding: '12px 40px 12px 38px',
+          borderRadius: 8, 
+          border: focused ? '2px solid #009CDE' : '1px solid #D1D5DB',
+          fontSize: 13, 
+          fontFamily: 'var(--font-sans)', 
+          color: '#333333',
+          background: '#ffffff', 
+          outline: 'none', 
+          boxSizing: 'border-box',
+          transition: 'all 0.15s ease',
+          boxShadow: focused ? '0 0 0 3px rgba(0, 156, 222, 0.15)' : 'none'
+        }}
+      />
+      {suffix && (
+        <div style={{ 
+          position: 'absolute', 
+          right: 12, 
+          display: 'flex',
+          alignItems: 'center' 
+        }}>
+          {suffix}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const LoginScreen = () => {
   const { loginUser, registerNewAccount, USERS } = useLD();
 
-  const [mode, setMode] = useState('signin'); // 'signin' | 'signup'
+  const [mode, setMode]                         = useState('signin');
+  const [email, setEmail]                       = useState('');
+  const [password, setPassword]                 = useState('');
+  const [showPw, setShowPw]                     = useState(false);
+  const [name, setName]                         = useState('');
+  const [signUpEmail, setSignUpEmail]           = useState('');
+  const [signUpPassword, setSignUpPassword]     = useState('');
+  const [showSignUpPw, setShowSignUpPw]         = useState(false);
+  const [department, setDepartment]             = useState('Engineering');
+  const [role, setRole]                         = useState('Employee');
 
-  // Sign In inputs
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const handleSignIn  = (e) => { e.preventDefault(); loginUser(email, password); };
+  const handleSignUp  = (e) => { e.preventDefault(); registerNewAccount({ name, email: signUpEmail, password: signUpPassword, department, role }); };
+  const quickLogin    = (u)  => loginUser(u.email, '123456');
 
-  // Sign Up inputs
-  const [name, setName] = useState('');
-  const [signUpEmail, setSignUpEmail] = useState('');
-  const [signUpPassword, setSignUpPassword] = useState('');
-  const [showSignUpPassword, setShowSignUpPassword] = useState(false);
-  const [department, setDepartment] = useState('Engineering');
-  const [role, setRole] = useState('Employee');
+  const eyeBtn = (show, toggle) => (
+    <button 
+      type="button" 
+      onClick={toggle} 
+      style={{ 
+        border: 'none', 
+        background: 'none', 
+        cursor: 'pointer', 
+        display: 'flex', 
+        padding: 4,
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
+      {show ? <EyeOff size={16} color="#003087" /> : <Eye size={16} color="#94A3B8" />}
+    </button>
+  );
 
-  const handleLoginSubmit = (e) => {
-    e.preventDefault();
-    if (!email) return;
-    loginUser(email, password);
-  };
-
-  const handleQuickDemoLogin = (userEmail) => {
-    loginUser(userEmail, '123456');
-  };
-
-  const handleSignUpSubmit = (e) => {
-    e.preventDefault();
-    if (!name || !signUpEmail) return;
-    registerNewAccount({
-      name,
-      email: signUpEmail,
-      password: signUpPassword,
-      department,
-      role
-    });
+  const selectStyle = {
+    width: '100%', 
+    padding: '12px', 
+    borderRadius: 8, 
+    border: '1px solid #D1D5DB',
+    fontSize: 13, 
+    fontFamily: 'var(--font-sans)', 
+    color: '#333333', 
+    background: '#ffffff',
+    outline: 'none', 
+    boxSizing: 'border-box', 
+    cursor: 'pointer',
+    transition: 'border-color 0.15s ease'
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f6f9] flex flex-col items-center justify-center p-4">
-      
-      {/* Brand Header */}
-      <div className="text-center space-y-2 mb-8">
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#0066cc] text-white font-extrabold text-2xl shadow-lg border border-white/20 mb-2">
-          xyz
-        </div>
-        <h1 className="text-3xl font-extrabold text-[#001e42] tracking-tight">
-          xyz Global L&D Platform
-        </h1>
-        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">
-          Learning and Devlopemnt department
-        </p>
-      </div>
+    <div style={{
+      minHeight: '100vh', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center',
+      background: '#ffffff', 
+      padding: '40px 20px', 
+      fontFamily: "var(--font-sans)",
+      boxSizing: 'border-box'
+    }}>
+      <div style={{
+        width: '100%', 
+        maxWidth: 400,
+        display: 'flex', 
+        flexDirection: 'column', 
+        gap: 28
+      }}>
 
-      {/* Login Card */}
-      <div className="w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden border-t-4 border-t-[#0066cc]">
-        
-        {/* Toggle Mode */}
-        <div className="flex border-b border-slate-200 bg-slate-50 text-xs font-bold">
-          <button
-            onClick={() => setMode('signin')}
-            className={`flex-1 py-3.5 flex items-center justify-center gap-2 transition-all ${
-              mode === 'signin'
-                ? 'bg-white text-[#0066cc] border-b-2 border-[#0066cc] font-extrabold'
-                : 'text-slate-500 hover:text-slate-900'
-            }`}
-          >
-            <LogIn className="w-4 h-4" /> Sign In
-          </button>
-          <button
-            onClick={() => setMode('signup')}
-            className={`flex-1 py-3.5 flex items-center justify-center gap-2 transition-all ${
-              mode === 'signup'
-                ? 'bg-white text-[#0066cc] border-b-2 border-[#0066cc] font-extrabold'
-                : 'text-slate-500 hover:text-slate-900'
-            }`}
-          >
-            <UserPlus className="w-4 h-4" /> Create New Account
-          </button>
+        {/* ── Corporate Header ── */}
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            width: 52, 
+            height: 52, 
+            borderRadius: 12,
+            background: 'linear-gradient(135deg, #003087 0%, #00205B 100%)', 
+            color: '#ffffff',
+            fontWeight: 800, 
+            fontSize: 18, 
+            marginBottom: 16,
+            boxShadow: '0 4px 12px rgba(0,48,135,0.2)'
+          }}>
+            xyz
+          </div>
+          <h1 style={{ 
+            color: '#00205B', 
+            fontSize: 24, 
+            fontWeight: 800, 
+            margin: 0, 
+            letterSpacing: '-0.5px' 
+          }}>
+            xyz TLCE LMS
+          </h1>
+          <p style={{ 
+            color: '#767676', 
+            fontSize: 12, 
+            marginTop: 6, 
+            fontWeight: 600,
+            textTransform: 'uppercase',
+            letterSpacing: '1px'
+          }}>
+            Learning &amp; Development Portal
+          </p>
         </div>
 
-        <div className="p-6">
-          {mode === 'signin' ? (
-            /* SIGN IN FORM */
-            <form onSubmit={handleLoginSubmit} className="space-y-4">
-              <div>
-                <label className="form-label-nielsen">Email Address (Gmail, Outlook, Work)</label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                  <input
+        {/* ── Main Form Container ── */}
+        <div style={{
+          background: '#ffffff',
+          border: '1px solid #E2E8F0',
+          borderRadius: 16,
+          boxShadow: '0 8px 30px rgba(0, 0, 0, 0.04)',
+          overflow: 'hidden'
+        }}>
+
+          {/* Clean Segmented Tab Control */}
+          <div style={{ 
+            display: 'flex', 
+            background: '#F8FAFC',
+            padding: '6px',
+            margin: '12px 12px 0',
+            borderRadius: 10,
+            border: '1px solid #E2E8F0'
+          }}>
+            {[
+              { key: 'signin', icon: LogIn, label: 'Sign In' },
+              { key: 'signup', icon: UserPlus, label: 'Register' },
+            ].map(({ key, icon: Icon, label }) => {
+              const active = mode === key;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setMode(key)}
+                  style={{
+                    flex: 1, 
+                    padding: '8px 12px', 
+                    border: 'none', 
+                    cursor: 'pointer',
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    gap: 8,
+                    fontSize: 12, 
+                    fontWeight: 700, 
+                    fontFamily: 'var(--font-sans)',
+                    borderRadius: 8,
+                    background: active ? '#ffffff' : 'transparent',
+                    color: active ? '#003087' : '#767676',
+                    boxShadow: active ? '0 2px 6px rgba(0,0,0,0.06)' : 'none',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  <Icon size={14} /> {label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Form Area */}
+          <div style={{ padding: '24px' }}>
+            {mode === 'signin' ? (
+              <form onSubmit={handleSignIn} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+
+                <Field label="Work Email Address">
+                  <IconInput
+                    icon={Mail}
                     type="email"
-                    required
-                    placeholder="e.g. yourname@gmail.com or @outlook.com"
+                    placeholder="employee@xyz.com"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    className="input-nielsen !pl-9 text-xs"
                   />
-                </div>
-              </div>
+                </Field>
 
-              <div>
-                <label className="form-label-nielsen">Password</label>
-                <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="••••••••"
+                <Field label="Password">
+                  <IconInput
+                    icon={Lock}
+                    type={showPw ? 'text' : 'password'}
+                    placeholder="Enter your password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    className="input-nielsen !pl-9 !pr-10 text-xs"
+                    suffix={eyeBtn(showPw, () => setShowPw(p => !p))}
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700"
-                    title={showPassword ? 'Hide Password' : 'Show Password'}
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4 text-[#0066cc]" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
+                </Field>
 
-              <button type="submit" className="w-full btn-nielsen-primary justify-center text-xs py-3 shadow-md">
-                <span>Sign In to Employee Portal</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+                <button
+                  type="submit"
+                  style={{
+                    width: '100%', 
+                    padding: '13px', 
+                    borderRadius: 8, 
+                    border: 'none',
+                    background: '#003087',
+                    color: '#ffffff', 
+                    fontWeight: 700, 
+                    fontSize: 14, 
+                    cursor: 'pointer',
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    gap: 8,
+                    transition: 'background 0.2s ease', 
+                    fontFamily: 'var(--font-sans)',
+                    marginTop: 6
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#00205B'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#003087'; }}
+                >
+                  Continue <ArrowRight size={16} />
+                </button>
 
-              {/* Quick Demo Login Preset Buttons */}
-              <div className="pt-4 border-t border-slate-200 space-y-2">
-                <div className="text-[11px] font-extrabold text-slate-600 uppercase tracking-wider text-center">
-                  Or One-Click Sign In As Test Users:
+                {/* Quick login demo preset section */}
+                <div style={{ paddingTop: 20, borderTop: '1px solid #E2E8F0', marginTop: 8 }}>
+                  <div style={{ 
+                    fontSize: 10, 
+                    fontWeight: 800, 
+                    color: '#767676', 
+                    textAlign: 'center', 
+                    textTransform: 'uppercase', 
+                    letterSpacing: '1px', 
+                    marginBottom: 12 
+                  }}>
+                    Select Test Profile
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                    {USERS?.map(u => (
+                      <button
+                        key={u.id}
+                        type="button"
+                        onClick={() => quickLogin(u)}
+                        style={{
+                          padding: '10px', 
+                          borderRadius: 8, 
+                          cursor: 'pointer', 
+                          textAlign: 'left',
+                          border: '1px solid #E2E8F0', 
+                          background: '#ffffff',
+                          transition: 'all 0.15s ease', 
+                          fontFamily: 'var(--font-sans)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: 2
+                        }}
+                        onMouseEnter={e => { 
+                          e.currentTarget.style.borderColor = '#009CDE'; 
+                          e.currentTarget.style.background = '#E5F4FC'; 
+                        }}
+                        onMouseLeave={e => { 
+                          e.currentTarget.style.borderColor = '#E2E8F0'; 
+                          e.currentTarget.style.background = '#ffffff'; 
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <span style={{ fontSize: 14 }}>{u.avatar}</span>
+                          <span style={{ 
+                            fontSize: 11, 
+                            fontWeight: 700, 
+                            color: '#00205B', 
+                            overflow: 'hidden', 
+                            textOverflow: 'ellipsis', 
+                            whiteSpace: 'nowrap' 
+                          }}>
+                            {u.name.split(' ')[0]}
+                          </span>
+                        </div>
+                        <div style={{ 
+                          fontSize: 9, 
+                          color: '#767676', 
+                          fontWeight: 600, 
+                          marginLeft: 20,
+                          overflow: 'hidden', 
+                          textOverflow: 'ellipsis', 
+                          whiteSpace: 'nowrap' 
+                        }}>
+                          {u.role}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {USERS.map(u => (
-                    <button
-                      key={u.id}
-                      type="button"
-                      onClick={() => handleQuickDemoLogin(u.email)}
-                      className="p-2 rounded-lg bg-slate-50 border border-slate-200 hover:border-[#0066cc] text-left transition-all hover:bg-blue-50/50"
-                    >
-                      <div className="text-xs font-extrabold text-[#001e42] flex items-center gap-1">
-                        <span>{u.avatar}</span> <span className="truncate">{u.name}</span>
-                      </div>
-                      <div className="text-[10px] text-slate-500 truncate">{u.role}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
 
-            </form>
-          ) : (
-            /* SIGN UP FORM */
-            <form onSubmit={handleSignUpSubmit} className="space-y-4">
-              <div>
-                <label className="form-label-nielsen">Full Name</label>
-                <div className="relative">
-                  <User className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Rahul Sharma"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                    className="input-nielsen !pl-9 text-xs"
-                  />
-                </div>
-              </div>
+              </form>
+            ) : (
+              <form onSubmit={handleSignUp} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-              <div>
-                <label className="form-label-nielsen">Work or Personal Email (Gmail / Outlook)</label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                  <input
-                    type="email"
-                    required
-                    placeholder="your.name@gmail.com or @outlook.com"
-                    value={signUpEmail}
-                    onChange={e => setSignUpEmail(e.target.value)}
-                    className="input-nielsen !pl-9 text-xs"
-                  />
-                </div>
-              </div>
+                <Field label="Full Name">
+                  <IconInput icon={User} placeholder="e.g. Vikram Patel" value={name} onChange={e => setName(e.target.value)} />
+                </Field>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="form-label-nielsen">Department</label>
-                  <select
-                    value={department}
-                    onChange={e => setDepartment(e.target.value)}
-                    className="input-nielsen text-xs"
-                  >
-                    <option value="Engineering">Engineering</option>
-                    <option value="Leadership">Leadership</option>
-                    <option value="Product">Product</option>
-                    <option value="HR">HR</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="form-label-nielsen">Role Type</label>
-                  <select
-                    value={role}
-                    onChange={e => setRole(e.target.value)}
-                    className="input-nielsen text-xs font-bold"
-                  >
-                    <option value="Employee">Normal Employee</option>
-                    <option value="Admin">L&D Administrator</option>
-                  </select>
-                </div>
-              </div>
+                <Field label="Work Email Address">
+                  <IconInput icon={Mail} type="email" placeholder="name@xyz.com" value={signUpEmail} onChange={e => setSignUpEmail(e.target.value)} />
+                </Field>
 
-              <div>
-                <label className="form-label-nielsen">Password</label>
-                <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                  <input
-                    type={showSignUpPassword ? 'text' : 'password'}
-                    required
-                    placeholder="••••••••"
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <Field label="Department">
+                    <select value={department} onChange={e => setDepartment(e.target.value)} style={selectStyle}>
+                      {['Engineering','Leadership','Product','HR','Design','Finance','Operations','Sales'].map(d => (
+                        <option key={d} value={d}>{d}</option>
+                      ))}
+                    </select>
+                  </Field>
+                  <Field label="Role">
+                    <select value={role} onChange={e => setRole(e.target.value)} style={selectStyle}>
+                      <option value="Employee">Employee</option>
+                      <option value="Admin">L&amp;D Admin</option>
+                    </select>
+                  </Field>
+                </div>
+
+                <Field label="Password">
+                  <IconInput
+                    icon={Lock}
+                    type={showSignUpPw ? 'text' : 'password'}
+                    placeholder="Create security password"
                     value={signUpPassword}
                     onChange={e => setSignUpPassword(e.target.value)}
-                    className="input-nielsen !pl-9 !pr-10 text-xs"
+                    suffix={eyeBtn(showSignUpPw, () => setShowSignUpPw(p => !p))}
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowSignUpPassword(!showSignUpPassword)}
-                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700"
-                    title={showSignUpPassword ? 'Hide Password' : 'Show Password'}
-                  >
-                    {showSignUpPassword ? <EyeOff className="w-4 h-4 text-[#0066cc]" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
+                </Field>
 
-              <button type="submit" className="w-full btn-nielsen-primary justify-center text-xs py-3 shadow-md">
-                <ShieldCheck className="w-4 h-4" />
-                <span>Create Account & Send Welcome Mail</span>
-              </button>
-            </form>
-          )}
+                <button
+                  type="submit"
+                  style={{
+                    width: '100%', 
+                    padding: '13px', 
+                    borderRadius: 8, 
+                    border: 'none',
+                    background: '#003087',
+                    color: '#ffffff', 
+                    fontWeight: 700, 
+                    fontSize: 14, 
+                    cursor: 'pointer',
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    gap: 8,
+                    transition: 'background 0.2s ease', 
+                    fontFamily: 'var(--font-sans)',
+                    marginTop: 6
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#00205B'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#003087'; }}
+                >
+                  <ShieldCheck size={16} /> Register Account
+                </button>
+
+              </form>
+            )}
+          </div>
         </div>
 
+        {/* Footer */}
+        <p style={{ color: '#767676', fontSize: 11, textAlign: 'center', margin: 0, fontWeight: 600 }}>
+          &copy; 2026 xyz Consumer LLC. All rights reserved.
+        </p>
       </div>
-
-      <div className="mt-8 text-xs font-semibold text-slate-500">
-        xyz Learning and Devlopemnt department • Real Gmail & Outlook Email Platform
-      </div>
-
     </div>
   );
 };

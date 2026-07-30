@@ -2,6 +2,50 @@ import React, { useState } from 'react';
 import { useLD } from '../context/LDContext';
 import { X, UserPlus, LogIn, Mail, Lock, User, ShieldCheck, Eye, EyeOff } from 'lucide-react';
 
+const Field = ({ label, children }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, width: '100%' }}>
+    <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--n-navy-dark)' }}>{label}</label>
+    {children}
+  </div>
+);
+
+const StyledInput = ({ type = 'text', placeholder, value, onChange, required = true, suffix, icon: Icon }) => {
+  const [focused, setFocused] = useState(false);
+  return (
+    <div style={{ position: 'relative', width: '100%' }}>
+      {Icon && <Icon size={14} color="var(--n-gray-mid)" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />}
+      <input
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        required={required}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        style={{
+          width: '100%', 
+          padding: Icon ? '10px 36px 10px 34px' : '10px 12px',
+          borderRadius: 8, 
+          border: focused ? '2px solid #009CDE' : '1px solid #D1D5DB',
+          fontSize: 13, 
+          fontFamily: 'var(--font-sans)', 
+          color: '#333333',
+          background: '#ffffff', 
+          outline: 'none', 
+          boxSizing: 'border-box',
+          transition: 'all 0.15s ease',
+          boxShadow: focused ? '0 0 0 3px rgba(0, 156, 222, 0.15)' : 'none'
+        }}
+      />
+      {suffix && (
+        <div style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)' }}>
+          {suffix}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const AuthModal = ({ isOpen, onClose }) => {
   const { registerNewAccount, loginUser } = useLD();
 
@@ -49,201 +93,220 @@ export const AuthModal = ({ isOpen, onClose }) => {
     }
   };
 
+  const eyeBtn = (show, toggle) => (
+    <button type="button" onClick={toggle} style={{ border: 'none', background: 'none', cursor: 'pointer', display: 'flex', padding: 2 }}>
+      {show ? <EyeOff size={14} color="var(--n-navy)" /> : <Eye size={14} color="var(--n-gray-mid)" />}
+    </button>
+  );
+
+  const selectStyle = {
+    width: '100%', 
+    padding: '10px 12px', 
+    borderRadius: 8, 
+    border: '1px solid #D1D5DB',
+    fontSize: 13, 
+    fontFamily: 'var(--font-sans)', 
+    color: '#333333', 
+    background: '#ffffff',
+    outline: 'none', 
+    boxSizing: 'border-box', 
+    cursor: 'pointer'
+  };
+
   return (
-    <div className="modal-overlay">
-      <div className="modal-content p-6 border-t-4 border-t-[#0066cc]">
-        
+    <div style={{
+      position: 'fixed',
+      inset: 0,
+      zIndex: 9100,
+      background: 'rgba(0, 20, 60, 0.5)',
+      backdropFilter: 'blur(4px)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '20px',
+      boxSizing: 'border-box'
+    }}>
+      <div style={{
+        background: '#ffffff',
+        borderRadius: 16,
+        boxShadow: '0 20px 50px rgba(0,0,0,0.15)',
+        width: '100%',
+        maxWidth: 480,
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
         {/* Modal Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+        <div style={{
+          padding: '18px 24px',
+          borderBottom: '1px solid #E2E8F0',
+          background: 'linear-gradient(135deg, #003087 0%, #00205B 100%)',
+          color: '#ffffff',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
           <div>
-            <h3 className="text-lg font-extrabold text-[#001e42] flex items-center gap-2">
-              {mode === 'signup' ? <UserPlus className="w-5 h-5 text-[#0066cc]" /> : <LogIn className="w-5 h-5 text-[#0066cc]" />}
-              {mode === 'signup' ? 'Create Employee Account' : 'Sign In to xyz L&D Portal'}
+            <h3 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: '#ffffff', display: 'flex', alignItems: 'center', gap: 8 }}>
+              {mode === 'signup' ? <UserPlus size={18} color="#009CDE" /> : <LogIn size={18} color="#009CDE" />}
+              {mode === 'signup' ? 'Create Account' : 'Sign In to Portal'}
             </h3>
-            <p className="text-xs font-semibold text-slate-500">
-              xyz Learning and Devlopemnt department
+            <p style={{ margin: '4px 0 0', fontSize: 11, color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>
+              xyz Learning and Development Department
             </p>
           </div>
-          <button onClick={onClose} className="p-1 rounded bg-slate-100 text-slate-500 hover:text-slate-900">
-            <X className="w-5 h-5" />
+          <button 
+            onClick={onClose} 
+            style={{
+              background: 'rgba(255,255,255,0.15)',
+              border: 'none',
+              borderRadius: 8,
+              padding: 6,
+              cursor: 'pointer',
+              color: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <X size={16} />
           </button>
         </div>
 
-        {/* Tab Switcher */}
-        <div className="flex gap-2 my-4 bg-slate-100 p-1 rounded-lg border border-slate-200 text-xs font-bold">
+        {/* Tab switcher */}
+        <div style={{
+          display: 'flex',
+          background: '#F8FAFC',
+          padding: '4px',
+          margin: '16px 16px 0',
+          borderRadius: 8,
+          border: '1px solid #E2E8F0'
+        }}>
           <button
             onClick={() => setMode('signup')}
-            className={`flex-1 py-2 rounded-md transition-all ${
-              mode === 'signup'
-                ? 'bg-[#0066cc] text-white shadow-xs'
-                : 'text-slate-700 hover:text-slate-900'
-            }`}
+            style={{
+              flex: 1, padding: '8px 12px', border: 'none', cursor: 'pointer',
+              borderRadius: 6, fontSize: 12, fontWeight: 700, fontFamily: 'var(--font-sans)',
+              background: mode === 'signup' ? '#ffffff' : 'transparent',
+              color: mode === 'signup' ? '#003087' : '#767676',
+              boxShadow: mode === 'signup' ? '0 1px 4px rgba(0,0,0,0.06)' : 'none',
+              transition: 'all 0.15s ease'
+            }}
           >
             Create New Account
           </button>
           <button
             onClick={() => setMode('signin')}
-            className={`flex-1 py-2 rounded-md transition-all ${
-              mode === 'signin'
-                ? 'bg-[#0066cc] text-white shadow-xs'
-                : 'text-slate-700 hover:text-slate-900'
-            }`}
+            style={{
+              flex: 1, padding: '8px 12px', border: 'none', cursor: 'pointer',
+              borderRadius: 6, fontSize: 12, fontWeight: 700, fontFamily: 'var(--font-sans)',
+              background: mode === 'signin' ? '#ffffff' : 'transparent',
+              color: mode === 'signin' ? '#003087' : '#767676',
+              boxShadow: mode === 'signin' ? '0 1px 4px rgba(0,0,0,0.06)' : 'none',
+              transition: 'all 0.15s ease'
+            }}
           >
-            Sign In Existing User
+            Sign In Existing
           </button>
         </div>
 
-        {mode === 'signup' ? (
-          /* SIGN UP FORM */
-          <form onSubmit={handleSignUp} className="space-y-4">
-            <div>
-              <label className="form-label-nielsen">Full Name</label>
-              <div className="relative">
-                <User className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Rahul Sharma"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  className="input-nielsen !pl-9 text-xs"
-                />
-              </div>
-            </div>
+        <div style={{ padding: '20px 24px 24px' }}>
+          {mode === 'signup' ? (
+            <form onSubmit={handleSignUp} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <Field label="Full Name">
+                <StyledInput icon={User} placeholder="e.g. Rahul Sharma" value={name} onChange={e => setName(e.target.value)} />
+              </Field>
 
-            <div>
-              <label className="form-label-nielsen">Gmail / Outlook / Work Email</label>
-              <div className="relative">
-                <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                <input
-                  type="email"
-                  required
-                  placeholder="your.email@gmail.com or @outlook.com"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  className="input-nielsen !pl-9 text-xs"
-                />
-              </div>
-              <p className="text-[10px] text-slate-500 mt-1 font-medium">
-                Automated event notifications & confirmations will be dispatched to this inbox.
-              </p>
-            </div>
+              <Field label="Email Address">
+                <StyledInput icon={Mail} type="email" placeholder="name@xyz.com" value={email} onChange={e => setEmail(e.target.value)} />
+              </Field>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="form-label-nielsen">Department</label>
-                <select
-                  value={department}
-                  onChange={e => setDepartment(e.target.value)}
-                  className="input-nielsen text-xs"
-                >
-                  <option value="Engineering">Engineering</option>
-                  <option value="Leadership">Leadership & Management</option>
-                  <option value="Product">Product Management</option>
-                  <option value="HR">HR & People Operations</option>
-                  <option value="Marketing">Marketing & Growth</option>
-                  <option value="Operations">Global Operations</option>
-                </select>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                <Field label="Department">
+                  <select value={department} onChange={e => setDepartment(e.target.value)} style={selectStyle}>
+                    {['Engineering', 'Leadership', 'Product', 'HR', 'Design', 'Finance', 'Operations', 'Sales'].map(d => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                </Field>
+
+                <Field label="Account Role">
+                  <select value={role} onChange={e => setRole(e.target.value)} style={selectStyle}>
+                    <option value="Employee">Employee</option>
+                    <option value="Admin">L&amp;D Admin</option>
+                  </select>
+                </Field>
               </div>
 
-              <div>
-                <label className="form-label-nielsen">Account Role</label>
-                <select
-                  value={role}
-                  onChange={e => setRole(e.target.value)}
-                  className="input-nielsen text-xs font-bold"
-                >
-                  <option value="Employee">Employee Attendee</option>
-                  <option value="Manager">Manager / Team Lead</option>
-                  <option value="Admin">L&D Administrator (Full Access)</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label className="form-label-nielsen">Password</label>
-              <div className="relative">
-                <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                <input
+              <Field label="Password">
+                <StyledInput
+                  icon={Lock}
                   type={showPassword ? 'text' : 'password'}
-                  required
                   placeholder="••••••••"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  className="input-nielsen !pl-9 !pr-10 text-xs"
+                  suffix={eyeBtn(showPassword, () => setShowPassword(!showPassword))}
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700"
-                  title={showPassword ? 'Hide Password' : 'Show Password'}
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4 text-[#0066cc]" /> : <Eye className="w-4 h-4" />}
+              </Field>
+
+              <div style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: 12,
+                marginTop: 6,
+                paddingTop: 16,
+                borderTop: '1px solid #E2E8F0'
+              }}>
+                <button type="button" onClick={onClose} style={{
+                  padding: '8px 16px', borderRadius: 6, border: '1px solid #D1D5DB',
+                  background: '#ffffff', color: '#333333', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-sans)'
+                }}>Cancel</button>
+                <button type="submit" style={{
+                  padding: '8px 16px', borderRadius: 6, border: 'none',
+                  background: '#003087', color: '#ffffff', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-sans)'
+                }}>
+                  <ShieldCheck size={14} /> Create Account
                 </button>
               </div>
-            </div>
+            </form>
+          ) : (
+            <form onSubmit={handleSignIn} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <Field label="Email Address">
+                <StyledInput icon={Mail} type="email" placeholder="name@xyz.com" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} />
+              </Field>
 
-            <div className="pt-2 flex justify-end gap-2 border-t border-slate-200">
-              <button type="button" onClick={onClose} className="btn-nielsen-secondary text-xs">
-                Cancel
-              </button>
-              <button type="submit" className="btn-nielsen-primary text-xs">
-                <ShieldCheck className="w-4 h-4" /> Create Account & Send Email
-              </button>
-            </div>
-          </form>
-        ) : (
-          /* SIGN IN FORM */
-          <form onSubmit={handleSignIn} className="space-y-4">
-            <div>
-              <label className="form-label-nielsen">Email Address</label>
-              <div className="relative">
-                <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                <input
-                  type="email"
-                  required
-                  placeholder="name@company.com"
-                  value={loginEmail}
-                  onChange={e => setLoginEmail(e.target.value)}
-                  className="input-nielsen !pl-9 text-xs"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="form-label-nielsen">Password</label>
-              <div className="relative">
-                <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                <input
+              <Field label="Password">
+                <StyledInput
+                  icon={Lock}
                   type={showLoginPassword ? 'text' : 'password'}
-                  required
                   placeholder="••••••••"
                   value={loginPassword}
                   onChange={e => setLoginPassword(e.target.value)}
-                  className="input-nielsen !pl-9 !pr-10 text-xs"
+                  suffix={eyeBtn(showLoginPassword, () => setShowLoginPassword(!showLoginPassword))}
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowLoginPassword(!showLoginPassword)}
-                  className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700"
-                  title={showLoginPassword ? 'Hide Password' : 'Show Password'}
-                >
-                  {showLoginPassword ? <EyeOff className="w-4 h-4 text-[#0066cc]" /> : <Eye className="w-4 h-4" />}
-                </button>
+              </Field>
+
+              <div style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: 12,
+                marginTop: 6,
+                paddingTop: 16,
+                borderTop: '1px solid #E2E8F0'
+              }}>
+                <button type="button" onClick={onClose} style={{
+                  padding: '8px 16px', borderRadius: 6, border: '1px solid #D1D5DB',
+                  background: '#ffffff', color: '#333333', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-sans)'
+                }}>Cancel</button>
+                <button type="submit" style={{
+                  padding: '8px 16px', borderRadius: 6, border: 'none',
+                  background: '#003087', color: '#ffffff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-sans)'
+                }}>Sign In</button>
               </div>
-            </div>
-
-            <div className="pt-2 flex justify-end gap-2 border-t border-slate-200">
-              <button type="button" onClick={onClose} className="btn-nielsen-secondary text-xs">
-                Cancel
-              </button>
-              <button type="submit" className="btn-nielsen-primary text-xs">
-                Sign In
-              </button>
-            </div>
-          </form>
-        )}
-
+            </form>
+          )}
+        </div>
       </div>
     </div>
   );

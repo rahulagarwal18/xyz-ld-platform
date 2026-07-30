@@ -1,198 +1,291 @@
 import React, { useState } from 'react';
 import { useLD } from '../context/LDContext';
-import { Search, Filter, Calendar, Clock, MapPin, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Search, Filter, Calendar, Clock, MapPin, ArrowRight, CheckCircle2, BookOpen, MessageSquare, Users, ClipboardList } from 'lucide-react';
+import { AssessmentModal } from './AssessmentModal';
+import { FeedbackModal } from './FeedbackModal';
 
 export const ConferenceList = ({ onSelectConference }) => {
-  const { conferences, registrations, currentUser } = useLD();
+  const { conferences, registrations, currentUser, assessmentResults } = useLD();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedAudience, setSelectedAudience] = useState('All');
+  const [assessmentModal, setAssessmentModal] = useState(null);
+  const [feedbackModal, setFeedbackModal] = useState(null);
 
-  const filteredConferences = conferences.filter(conf => {
-    const matchesSearch = 
-      conf.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conf.subtitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conf.speaker.toLowerCase().includes(searchQuery.toLowerCase());
-
-    const matchesCategory = selectedCategory === 'All' || conf.category === selectedCategory;
-    const matchesAudience = selectedAudience === 'All' || conf.targetAudience.includes(selectedAudience);
-
-    return matchesSearch && matchesCategory && matchesAudience;
+  const filtered = conferences.filter(c => {
+    const q = searchQuery.toLowerCase();
+    const matchSearch = c.title.toLowerCase().includes(q) || c.subtitle.toLowerCase().includes(q) || c.speaker.toLowerCase().includes(q);
+    const matchCat = selectedCategory === 'All' || c.category === selectedCategory;
+    const matchAud = selectedAudience === 'All' || c.targetAudience.includes(selectedAudience);
+    return matchSearch && matchCat && matchAud;
   });
 
   const categories = ['All', ...new Set(conferences.map(c => c.category))];
-  const audiences = ['All', 'Engineering', 'Leadership', 'Product', 'HR', 'All Employees'];
+  const audiences = ['All', 'Engineering', 'Leadership', 'Product', 'HR', 'All Employees', 'Design', 'Finance'];
 
-  const getFallbackImage = (id) => {
-    switch (id) {
-      case 'conf-1': return 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80';
-      case 'conf-2': return 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=800&q=80';
-      case 'conf-3': return 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80';
-      default: return 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80';
-    }
-  };
+  const getFallbackImg = () => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80';
 
   return (
-    <div className="space-y-6">
-      
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+
       {/* Control Bar */}
-      <div className="nielsen-card p-4 flex flex-col md:flex-row items-center justify-between gap-4">
-        
+      <div style={{
+        background: 'var(--n-white)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--n-gray-border)',
+        padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        flexWrap: 'wrap', gap: 12
+      }}>
         {/* Search */}
-        <div className="relative w-full md:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+        <div style={{ position: 'relative', flex: '1 1 260px', maxWidth: 360 }}>
+          <Search size={15} color="var(--n-gray-mid)" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }} />
           <input
+            className="form-input"
             type="text"
-            placeholder="Search conferences, speakers, topics..."
+            placeholder="Search TLCE programs, speakers, topics..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="input-nielsen !pl-9 text-xs"
+            style={{ paddingLeft: 36, fontSize: 13 }}
           />
         </div>
 
-        {/* Category Pills & Audience */}
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-1 overflow-x-auto bg-slate-100 p-1 rounded-lg border border-slate-200 text-xs font-bold">
-            {categories.map(cat => (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center' }}>
+          {/* Category Pills */}
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 4, overflowX: 'auto',
+            background: 'var(--n-gray-light)', padding: '4px 6px', borderRadius: 10,
+            border: '1px solid var(--n-gray-border)'
+          }}>
+            {categories.slice(0, 5).map(cat => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1.5 rounded transition-all ${
-                  selectedCategory === cat
-                    ? 'bg-[#0066cc] text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                {cat}
-              </button>
+                style={{
+                  padding: '5px 12px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap',
+                  background: selectedCategory === cat ? 'var(--n-navy)' : 'transparent',
+                  color: selectedCategory === cat ? '#fff' : 'var(--n-gray-mid)',
+                  transition: 'all 0.15s ease'
+                }}
+              >{cat}</button>
             ))}
           </div>
 
-          <div className="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 text-xs">
-            <Filter className="w-3.5 h-3.5 text-[#0066cc]" />
-            <span className="text-slate-600 font-bold">Audience:</span>
+          {/* Audience Filter */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--n-gray-light)', padding: '6px 12px', borderRadius: 10, border: '1px solid var(--n-gray-border)' }}>
+            <Filter size={13} color="var(--n-blue)" />
+            <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--n-gray-mid)' }}>Audience:</span>
             <select
               value={selectedAudience}
               onChange={e => setSelectedAudience(e.target.value)}
-              className="bg-transparent text-slate-900 font-extrabold focus:outline-none cursor-pointer"
+              style={{ background: 'transparent', border: 'none', fontSize: 12, fontWeight: 700, color: 'var(--n-navy)', cursor: 'pointer', outline: 'none' }}
             >
-              {audiences.map(aud => (
-                <option key={aud} value={aud}>{aud}</option>
-              ))}
+              {audiences.map(a => <option key={a} value={a}>{a}</option>)}
             </select>
           </div>
         </div>
-
       </div>
 
-      {/* Grid of Event Cards with Images */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {filteredConferences.map(conf => {
+      {/* Program Cards Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
+        {filtered.map(conf => {
           const isRegistered = registrations.some(r => r.conferenceId === conf.id && r.userEmail === currentUser.email);
-          const percentFilled = Math.round((conf.registeredCount / conf.totalSeats) * 100);
-          const isFillingFast = percentFilled >= 75;
+          const myReg = registrations.find(r => r.conferenceId === conf.id && r.userEmail === currentUser.email);
+          const isFull = conf.registeredCount >= conf.totalSeats;
+          const pct = Math.round((conf.registeredCount / conf.totalSeats) * 100);
           const seatsLeft = conf.totalSeats - conf.registeredCount;
+          const onWaitlist = (conf.waitlist || []).some(w => w.email === currentUser.email);
+          const myAssessments = assessmentResults.filter(r => r.conferenceId === conf.id && r.userEmail === currentUser.email);
+          const preAssessmentDone = myAssessments.some(r => r.type === 'pre');
+          const postAssessmentDone = myAssessments.some(r => r.type === 'post');
 
           return (
-            <div 
-              key={conf.id}
-              className="nielsen-card overflow-hidden flex flex-col justify-between hover:border-[#0066cc] transition-all duration-200 group relative border-t-4 border-t-[#0066cc]"
+            <div key={conf.id} style={{
+              background: 'var(--n-white)', borderRadius: 'var(--radius-lg)',
+              border: '1px solid var(--n-gray-border)',
+              borderTop: `4px solid ${isFull ? 'var(--n-red)' : isRegistered ? 'var(--n-success)' : 'var(--n-navy)'}`,
+              overflow: 'hidden', display: 'flex', flexDirection: 'column',
+              boxShadow: 'var(--shadow-sm)', transition: 'box-shadow 0.25s ease, transform 0.25s ease'
+            }}
+              onMouseEnter={e => { e.currentTarget.style.boxShadow = 'var(--shadow-lg)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; e.currentTarget.style.transform = 'none'; }}
             >
-              {/* Event Card Image */}
-              <div className="relative h-44 w-full overflow-hidden bg-slate-100">
-                <img 
-                  src={conf.image || getFallbackImage(conf.id)} 
-                  alt={conf.title} 
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = getFallbackImage(conf.id);
-                  }}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              {/* Card Image */}
+              <div style={{ position: 'relative', height: 160, overflow: 'hidden', background: '#ddd' }}>
+                <img
+                  src={conf.image || getFallbackImg()}
+                  alt={conf.title}
+                  onError={e => { e.target.onerror = null; e.target.src = getFallbackImg(); }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }}
                 />
-                <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                  <span className="text-[11px] font-extrabold px-2.5 py-0.5 rounded bg-[#001e42] text-white shadow-xs">
-                    {conf.category}
-                  </span>
-                  {isFillingFast ? (
-                    <span className="badge-nielsen badge-filling-fast shadow-xs">FILLING FAST 🔥</span>
-                  ) : (
-                    <span className="badge-nielsen badge-available shadow-xs">AVAILABLE</span>
-                  )}
+                {/* Overlays */}
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%)' }} />
+                <div style={{ position: 'absolute', top: 10, left: 10, right: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <span style={{
+                    fontSize: 10, fontWeight: 800, padding: '4px 10px', borderRadius: 999,
+                    background: 'rgba(0,32,91,0.85)', color: '#fff', letterSpacing: 0.3
+                  }}>{conf.category}</span>
+                  {isFull && !isRegistered
+                    ? <span style={{ fontSize: 10, fontWeight: 800, padding: '4px 10px', borderRadius: 999, background: 'rgba(204,0,0,0.9)', color: '#fff' }}>WAITLIST</span>
+                    : pct >= 80 && !isRegistered
+                    ? <span style={{ fontSize: 10, fontWeight: 800, padding: '4px 10px', borderRadius: 999, background: 'rgba(245,127,23,0.9)', color: '#fff' }}>⚡ FILLING FAST</span>
+                    : isRegistered
+                    ? <span style={{ fontSize: 10, fontWeight: 800, padding: '4px 10px', borderRadius: 999, background: 'rgba(46,125,50,0.9)', color: '#fff' }}>✓ ENROLLED</span>
+                    : null}
+                </div>
+                <div style={{ position: 'absolute', bottom: 10, left: 10 }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.85)' }}>{conf.bannerTag}</span>
                 </div>
               </div>
 
               {/* Card Body */}
-              <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
-                <div className="space-y-2">
-                  <h3 className="font-extrabold text-[#001e42] text-lg leading-snug group-hover:text-[#0066cc] transition-colors">
-                    {conf.title}
-                  </h3>
-                  <p className="text-xs text-slate-600 line-clamp-2 font-medium">
-                    {conf.subtitle}
-                  </p>
+              <div style={{ padding: '16px 18px', flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div>
+                  <h3 style={{ fontSize: 16, fontWeight: 800, color: 'var(--n-navy-dark)', lineHeight: 1.25, margin: 0 }}>{conf.title}</h3>
+                  <p style={{ fontSize: 12, color: 'var(--n-gray-mid)', marginTop: 4, lineHeight: 1.4 }}>{conf.subtitle}</p>
+                </div>
 
-                  <div className="flex items-center gap-1 flex-wrap pt-1">
-                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mr-1">Target:</span>
-                    {conf.targetAudience.map((aud, idx) => (
-                      <span key={idx} className="badge-nielsen badge-target text-[10px]">
-                        {aud}
-                      </span>
-                    ))}
+                {/* Audience tags */}
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  {conf.targetAudience.slice(0, 3).map((a, i) => (
+                    <span key={i} className="badge badge-blue" style={{ fontSize: 9 }}>{a}</span>
+                  ))}
+                </div>
+
+                {/* Feature badges */}
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  {conf.hasMeal && <span className="badge badge-green" style={{ fontSize: 9 }}>🍽️ Meal</span>}
+                  {conf.hasAssessment && <span className="badge badge-navy" style={{ fontSize: 9 }}>📝 Assessment</span>}
+                  {conf.durationHours && <span className="badge badge-gray" style={{ fontSize: 9 }}>⏱️ {conf.durationHours}h</span>}
+                  {(conf.waitlist || []).length > 0 && <span className="badge badge-amber" style={{ fontSize: 9 }}>🔔 {(conf.waitlist || []).length} waitlisted</span>}
+                </div>
+
+                {/* Schedule */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4, paddingTop: 8, borderTop: '1px solid var(--n-gray-border)' }}>
+                  {[
+                    { icon: Calendar, text: conf.date },
+                    { icon: Clock, text: conf.time },
+                    { icon: MapPin, text: conf.location },
+                  ].map(({ icon: Icon, text }) => (
+                    <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 12, color: 'var(--n-gray-dark)' }}>
+                      <Icon size={12} color="var(--n-blue)" /> {text}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Seat progress */}
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, fontWeight: 700, color: 'var(--n-gray-dark)', marginBottom: 5 }}>
+                    <span>Seats</span>
+                    <span style={{ color: isFull ? 'var(--n-red)' : seatsLeft <= 10 ? 'var(--n-warning)' : 'var(--n-success)' }}>
+                      {isFull ? 'FULL' : `${seatsLeft} left`} ({conf.registeredCount}/{conf.totalSeats})
+                    </span>
+                  </div>
+                  <div className="progress-bar">
+                    <div className="progress-fill" style={{
+                      width: `${pct}%`,
+                      background: pct >= 100 ? 'var(--n-red)' : pct >= 80 ? 'var(--n-warning)' : 'var(--grad-blue)'
+                    }} />
                   </div>
                 </div>
 
-                {/* Event Schedule Info */}
-                <div className="space-y-1.5 text-xs text-slate-700 font-semibold pt-2 border-t border-slate-100">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-3.5 h-3.5 text-[#0066cc]" />
-                    <span>{conf.date}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-3.5 h-3.5 text-[#0066cc]" />
-                    <span>{conf.time}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-3.5 h-3.5 text-[#0066cc]" />
-                    <span className="truncate">{conf.location}</span>
-                  </div>
-                </div>
-
-                {/* Occupancy Progress */}
-                <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1.5">
-                  <div className="flex justify-between text-xs font-bold text-slate-700">
-                    <span>Capacity Status</span>
-                    <span>{conf.registeredCount} / {conf.totalSeats} (<span className="text-emerald-700">{seatsLeft} left</span>)</span>
-                  </div>
-                  <div className="progress-bar-bg">
-                    <div className="progress-bar-fill bg-[#0066cc]" style={{ width: `${percentFilled}%` }} />
-                  </div>
-                </div>
-
-                {/* Action CTA */}
-                <div className="pt-1">
+                {/* Actions */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 'auto', paddingTop: 8 }}>
                   {isRegistered ? (
-                    <button disabled className="w-full py-2.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-300 text-xs font-extrabold flex items-center justify-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Registered & Options Saved
+                    <>
+                      <button disabled style={{
+                        width: '100%', padding: '10px', borderRadius: 'var(--radius-md)',
+                        background: 'var(--n-success-bg)', border: '1.5px solid var(--n-success)',
+                        color: 'var(--n-success)', fontWeight: 700, fontSize: 13,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
+                      }}>
+                        <CheckCircle2 size={15} /> Registered ✓
+                      </button>
+
+                      {/* Assessment buttons */}
+                      {conf.hasAssessment && conf.assessmentEnabled && (
+                        <div style={{ display: 'flex', gap: 8 }}>
+                          <button
+                            className="btn btn-outline-blue btn-sm"
+                            style={{ flex: 1, justifyContent: 'center', opacity: preAssessmentDone ? 0.5 : 1 }}
+                            onClick={() => !preAssessmentDone && setAssessmentModal({ conf, type: 'pre' })}
+                          >
+                            <BookOpen size={12} />
+                            {preAssessmentDone ? '✓ Pre Done' : 'Pre-Assessment'}
+                          </button>
+                          <button
+                            className="btn btn-outline-blue btn-sm"
+                            style={{ flex: 1, justifyContent: 'center', opacity: postAssessmentDone ? 0.5 : 1 }}
+                            onClick={() => !postAssessmentDone && setAssessmentModal({ conf, type: 'post' })}
+                          >
+                            <ClipboardList size={12} />
+                            {postAssessmentDone ? '✓ Post Done' : 'Post-Assessment'}
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Feedback button */}
+                      {!myReg?.feedbackSubmitted && (
+                        <button
+                          className="btn btn-secondary btn-sm"
+                          style={{ width: '100%', justifyContent: 'center' }}
+                          onClick={() => setFeedbackModal(conf)}
+                        >
+                          <MessageSquare size={12} /> Submit Feedback
+                        </button>
+                      )}
+                      {myReg?.feedbackSubmitted && (
+                        <span style={{ textAlign: 'center', fontSize: 12, color: 'var(--n-success)', fontWeight: 600 }}>
+                          ✓ Feedback Submitted
+                        </span>
+                      )}
+                    </>
+                  ) : isFull ? (
+                    <button
+                      onClick={() => onSelectConference(conf)}
+                      className="btn btn-danger"
+                      style={{ width: '100%', justifyContent: 'center' }}
+                    >
+                      <Users size={14} /> {onWaitlist ? '✓ On Waitlist' : 'Join Waitlist'}
                     </button>
                   ) : (
                     <button
                       onClick={() => onSelectConference(conf)}
-                      className="w-full btn-nielsen-primary !py-2.5 text-xs justify-center"
+                      className="btn btn-primary"
+                      style={{ width: '100%', justifyContent: 'center' }}
                     >
-                      <span>Register Now (Meal & Cab)</span>
-                      <ArrowRight className="w-4 h-4" />
+                      Register Now <ArrowRight size={14} />
                     </button>
                   )}
                 </div>
-
               </div>
-
             </div>
           );
         })}
       </div>
 
+      {filtered.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--n-gray-mid)' }}>
+          <Search size={40} style={{ margin: '0 auto 12px', opacity: 0.4 }} />
+          <p style={{ fontWeight: 600, fontSize: 16 }}>No TLCE programs match your search.</p>
+          <p style={{ fontSize: 13, marginTop: 4 }}>Try a different keyword or clear the filters.</p>
+        </div>
+      )}
+
+      {/* Assessment Modal */}
+      {assessmentModal && (
+        <AssessmentModal
+          conference={assessmentModal.conf}
+          type={assessmentModal.type}
+          onClose={() => setAssessmentModal(null)}
+        />
+      )}
+
+      {/* Feedback Modal */}
+      {feedbackModal && (
+        <FeedbackModal
+          conference={feedbackModal}
+          onClose={() => setFeedbackModal(null)}
+        />
+      )}
     </div>
   );
 };

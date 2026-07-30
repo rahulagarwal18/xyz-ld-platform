@@ -1,126 +1,157 @@
 import React from 'react';
 import { useLD } from '../context/LDContext';
-import { Mail, Plus, LogOut, Calendar, BarChart3, Bell } from 'lucide-react';
+import { Mail, Plus, LogOut, LayoutGrid, Calendar, BarChart3 } from 'lucide-react';
 
-export const Header = ({ 
-  activeTab, 
-  setActiveTab, 
-  onOpenEmailInbox, 
-  onOpenCreateModal 
-}) => {
+export const Header = ({ activeTab, setActiveTab, onOpenEmailInbox, onOpenCreateModal }) => {
   const { currentUser, logoutUser, emails } = useLD();
-
   const unreadEmailCount = emails.filter(e => !e.read).length;
 
+  const TABS = [
+    { id: 'programs', label: 'TLCE Programs', icon: LayoutGrid },
+    { id: 'calendar', label: 'Annual Calendar', icon: Calendar },
+    { id: 'analytics', label: 'Analytics', icon: BarChart3, adminOnly: false },
+  ];
+
   return (
-    <header className="sticky top-0 z-40 bg-[#001e42] border-b border-[#002d62] text-white shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 lg:px-8 h-16 flex items-center justify-between gap-4">
-        
-        {/* Left: Executive Brand Identity */}
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0066cc] to-[#00a3e0] flex items-center justify-center font-black text-lg tracking-tighter text-white shadow-md border border-white/20">
-            xyz
-          </div>
-          <div className="flex flex-col justify-center">
-            <div className="flex items-center gap-2">
-              <span className="text-lg font-black tracking-tight text-white leading-none">xyz</span>
-              <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#00a3e0]/15 text-[#00a3e0] border border-[#00a3e0]/30 tracking-wider">
-                L&D PORTAL
-              </span>
+    <header style={{
+      position: 'sticky', top: 0, zIndex: 40,
+      background: 'var(--grad-navy)',
+      borderBottom: '2px solid rgba(0,156,222,0.3)',
+      boxShadow: '0 4px 20px rgba(0,32,91,0.4)'
+    }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+
+        {/* Brand */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+          <div style={{
+            width: 40, height: 40, borderRadius: 10,
+            background: 'linear-gradient(135deg, var(--n-red) 0%, #FF3333 100%)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontWeight: 900, fontSize: 13, color: '#fff',
+            boxShadow: '0 2px 8px rgba(204,0,0,0.4)', border: '1.5px solid rgba(255,255,255,0.2)',
+            letterSpacing: -0.5
+          }}>xyz</div>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 16, fontWeight: 900, color: '#fff', letterSpacing: 0.5 }}>xyz</span>
+              <span style={{
+                fontSize: 9, fontWeight: 800, padding: '2px 8px', borderRadius: 999,
+                background: 'rgba(0,156,222,0.25)', color: 'var(--n-blue-light)',
+                border: '1px solid rgba(0,156,222,0.4)', letterSpacing: 1.5, textTransform: 'uppercase'
+              }}>TLCE LMS</span>
             </div>
-            <span className="text-[11px] font-semibold text-slate-300 tracking-wide mt-0.5">
-              Learning and Devlopemnt department
-            </span>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)', fontWeight: 500, marginTop: 1 }}>
+              Learning and Development Department
+            </div>
           </div>
         </div>
 
-        {/* Center: Sleek Navigation Switcher */}
-        <nav className="hidden md:flex items-center bg-[#00132e] p-1 rounded-xl border border-[#002d62] shadow-inner">
-          <button
-            onClick={() => setActiveTab('events')}
-            className={`px-4 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-2 ${
-              activeTab === 'events'
-                ? 'bg-[#0066cc] text-white shadow-sm'
-                : 'text-slate-300 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            <Calendar className="w-3.5 h-3.5" />
-            <span>Conferences Catalog</span>
-          </button>
-          
-          <button
-            onClick={() => setActiveTab('dashboard')}
-            className={`px-4 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-2 ${
-              activeTab === 'dashboard'
-                ? 'bg-[#0066cc] text-white shadow-sm'
-                : 'text-slate-300 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            <BarChart3 className="w-3.5 h-3.5" />
-            <span>Headcount Analytics</span>
-            {currentUser?.role === 'Admin' && (
-              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-            )}
-          </button>
+        {/* Navigation Tabs */}
+        <nav style={{
+          display: 'flex', alignItems: 'center',
+          background: 'rgba(0,0,0,0.25)', borderRadius: 12,
+          padding: 4, border: '1px solid rgba(255,255,255,0.1)',
+          gap: 2
+        }}>
+          {TABS.map(tab => {
+            const Icon = tab.icon;
+            const active = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 7,
+                  padding: '7px 16px', borderRadius: 9, border: 'none', cursor: 'pointer',
+                  fontSize: 12, fontWeight: 700, letterSpacing: 0.3,
+                  background: active ? 'var(--n-blue)' : 'transparent',
+                  color: active ? '#fff' : 'rgba(255,255,255,0.65)',
+                  boxShadow: active ? '0 2px 8px rgba(0,156,222,0.4)' : 'none',
+                  transition: 'all 0.2s ease',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                <Icon size={13} />
+                <span className="hidden md:inline">{tab.label}</span>
+                {tab.id === 'analytics' && currentUser?.role === 'Admin' && (
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#F59E0B' }} />
+                )}
+              </button>
+            );
+          })}
         </nav>
 
-        {/* Right: User Profile & Quick Actions */}
-        <div className="flex items-center gap-3">
-          
-          {/* Admin "New Event" CTA */}
+        {/* Right actions */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+
           {currentUser?.role === 'Admin' && (
             <button
               onClick={onOpenCreateModal}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0066cc] hover:bg-[#0052a3] text-white text-xs font-extrabold transition-all shadow-sm border border-white/10"
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px',
+                borderRadius: 10, border: '1px solid rgba(0,156,222,0.4)',
+                background: 'rgba(0,156,222,0.2)', color: 'var(--n-blue-light)',
+                fontSize: 12, fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s ease'
+              }}
             >
-              <Plus className="w-3.5 h-3.5 text-white" />
-              <span>New Event</span>
+              <Plus size={13} /> New Program
             </button>
           )}
 
-          {/* Email Inbox Trigger */}
+          {/* Email */}
           <button
             onClick={onOpenEmailInbox}
-            className="relative p-2 rounded-lg bg-[#00132e] border border-[#002d62] text-slate-300 hover:text-white hover:border-[#0066cc] transition-all"
-            title="Automated Emails Inbox"
+            style={{
+              position: 'relative', padding: '9px 10px', borderRadius: 10,
+              background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.1)',
+              color: 'var(--n-blue-light)', cursor: 'pointer', transition: 'all 0.2s ease',
+              display: 'flex', alignItems: 'center'
+            }}
           >
-            <Mail className="w-4 h-4 text-[#00a3e0]" />
+            <Mail size={16} />
             {unreadEmailCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center border border-[#001e42]">
-                {unreadEmailCount}
-              </span>
+              <span style={{
+                position: 'absolute', top: -4, right: -4,
+                background: 'var(--n-red)', color: '#fff',
+                fontSize: 9, fontWeight: 800, width: 16, height: 16,
+                borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                border: '2px solid var(--n-navy-dark)'
+              }}>{unreadEmailCount}</span>
             )}
           </button>
 
-          {/* User Profile Badge */}
+          {/* Profile */}
           {currentUser && (
-            <div className="flex items-center gap-2 bg-[#00132e] pl-2 pr-3 py-1 rounded-xl border border-[#002d62]">
-              <div className="w-7 h-7 rounded-lg bg-[#0066cc]/30 border border-[#0066cc]/50 flex items-center justify-center text-sm font-bold">
-                {currentUser.avatar || '👤'}
-              </div>
-              <div className="text-left leading-tight hidden sm:block">
-                <div className="text-xs font-extrabold text-white max-w-[120px] truncate">
-                  {currentUser.name}
-                </div>
-                <div className="text-[9px] font-bold text-[#00a3e0] uppercase tracking-wider">
-                  {currentUser.role}
-                </div>
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 9,
+              background: 'rgba(0,0,0,0.25)', padding: '6px 12px 6px 8px',
+              borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)'
+            }}>
+              <div style={{
+                width: 28, height: 28, borderRadius: 8,
+                background: 'rgba(0,156,222,0.3)', border: '1.5px solid rgba(0,156,222,0.5)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14
+              }}>{currentUser.avatar || '👤'}</div>
+              <div style={{ lineHeight: 1 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#fff', maxWidth: 110, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{currentUser.name}</div>
+                <div style={{ fontSize: 9, fontWeight: 800, color: 'var(--n-blue-light)', textTransform: 'uppercase', letterSpacing: 1 }}>{currentUser.role}</div>
               </div>
             </div>
           )}
 
-          {/* Logout Button */}
           <button
             onClick={logoutUser}
-            className="p-1.5 px-2.5 rounded-lg bg-slate-800/80 hover:bg-rose-600/80 border border-slate-700 hover:border-rose-500 text-slate-300 hover:text-white transition-all flex items-center gap-1 text-xs font-bold"
-            title="Log Out Session"
+            style={{
+              padding: '8px 10px', borderRadius: 10,
+              background: 'rgba(204,0,0,0.15)', border: '1px solid rgba(204,0,0,0.3)',
+              color: '#FF8888', cursor: 'pointer', transition: 'all 0.2s ease',
+              display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 700
+            }}
           >
-            <LogOut className="w-3.5 h-3.5 text-slate-300" />
-            <span className="hidden lg:inline">Logout</span>
+            <LogOut size={14} />
+            <span style={{ display: 'none' }} className="lg:inline">Logout</span>
           </button>
-
         </div>
-
       </div>
     </header>
   );

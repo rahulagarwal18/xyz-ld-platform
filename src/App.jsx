@@ -4,6 +4,7 @@ import { Header } from './components/Header';
 import { BannerCarousel } from './components/BannerCarousel';
 import { HeadcountDashboard } from './components/HeadcountDashboard';
 import { ConferenceList } from './components/ConferenceList';
+import { TLCECalendar } from './components/TLCECalendar';
 import { RegistrationModal } from './components/RegistrationModal';
 import { EmailInboxDrawer } from './components/EmailInboxDrawer';
 import { ChatBot } from './components/ChatBot';
@@ -11,32 +12,29 @@ import { CreateConferenceModal } from './components/CreateConferenceModal';
 import { AuthModal } from './components/AuthModal';
 import { LoginScreen } from './components/LoginScreen';
 import { Toast } from './components/Toast';
-import { ShieldCheck, Sparkles } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 const MainApp = () => {
   const { currentUser } = useLD();
-
-  const [activeTab, setActiveTab] = useState('events'); // 'events' | 'dashboard'
+  const [activeTab, setActiveTab] = useState('programs'); // 'programs' | 'calendar' | 'analytics'
   const [selectedConferenceForReg, setSelectedConferenceForReg] = useState(null);
-  
   const [isEmailInboxOpen, setIsEmailInboxOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  // If user is logged out, show LoginScreen
   if (!currentUser) {
-    return (
-      <>
-        <LoginScreen />
-        <Toast />
-      </>
-    );
+    return (<><LoginScreen /><Toast /></>);
   }
 
+  const TAB_LABELS = {
+    programs: 'TLCE Programs',
+    calendar: 'Annual Calendar',
+    analytics: 'Analytics & Roster'
+  };
+
   return (
-    <div className="min-h-screen bg-[#f4f6f9] text-slate-900 flex flex-col font-sans selection:bg-[#0066cc] selection:text-white">
-      
-      {/* Top Executive Header */}
+    <div style={{ minHeight: '100vh', background: 'var(--n-gray-light)', color: 'var(--n-gray-dark)', display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-sans)' }}>
+
       <Header
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -45,96 +43,91 @@ const MainApp = () => {
         onOpenAuthModal={() => setIsAuthModalOpen(true)}
       />
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 space-y-6">
-        
-        {/* Banner Carousel for 3 Mandatory Featured Banners */}
-        <BannerCarousel 
-          onSelectConference={(conf) => setSelectedConferenceForReg(conf)} 
-        />
+      <main style={{ flex: 1, maxWidth: 1280, width: '100%', margin: '0 auto', padding: '24px 24px 48px', display: 'flex', flexDirection: 'column', gap: 24 }}>
 
-        {/* View Header Bar */}
-        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-          <div className="flex items-center gap-2">
-            <h2 className="text-xl font-extrabold text-[#001e42] tracking-tight">
-              {activeTab === 'events' ? 'Conference Catalog & Registrations' : 'Headcount Analytics & Attendee Roster'}
+        {/* Banner Carousel — only on Programs tab */}
+        {activeTab === 'programs' && (
+          <BannerCarousel onSelectConference={(conf) => setSelectedConferenceForReg(conf)} />
+        )}
+
+        {/* Section header bar */}
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          borderBottom: '2px solid var(--n-gray-border)', paddingBottom: 14
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <h2 style={{ fontSize: 20, color: 'var(--n-navy-dark)', fontWeight: 800 }}>
+              {TAB_LABELS[activeTab]}
             </h2>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#0066cc]/10 text-[#0066cc] font-extrabold border border-[#0066cc]/20">
-              Q3 Flagship Calendar
-            </span>
+            <span style={{
+              fontSize: 11, padding: '4px 12px', borderRadius: 999,
+              background: 'var(--n-blue-pale)', color: 'var(--n-navy)',
+              fontWeight: 700, border: '1px solid rgba(0,156,222,0.3)',
+              textTransform: 'uppercase', letterSpacing: 0.5
+            }}>2026 Annual TLCE</span>
           </div>
-
-          <div className="hidden md:flex items-center gap-3 text-xs text-slate-600 font-bold">
-            <span className="flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 text-emerald-700">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" /> Active Session: <strong>{currentUser.email}</strong>
-            </span>
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            fontSize: 12, color: 'var(--n-success)', fontWeight: 600,
+            background: 'var(--n-success-bg)', padding: '6px 14px',
+            borderRadius: 999, border: '1px solid rgba(46,125,50,0.3)'
+          }}>
+            <ShieldCheck size={14} />
+            {currentUser.email}
           </div>
         </div>
 
-        {/* Tab View Content */}
-        {activeTab === 'events' ? (
-          <ConferenceList
-            onSelectConference={(conf) => setSelectedConferenceForReg(conf)}
-          />
-        ) : (
-          <HeadcountDashboard
-            onOpenRegistrationModal={(conf) => setSelectedConferenceForReg(conf)}
-          />
+        {/* Tab content */}
+        {activeTab === 'programs' && (
+          <ConferenceList onSelectConference={(conf) => setSelectedConferenceForReg(conf)} />
         )}
-
+        {activeTab === 'calendar' && (
+          <TLCECalendar onSelectConference={(conf) => setSelectedConferenceForReg(conf)} />
+        )}
+        {activeTab === 'analytics' && (
+          <HeadcountDashboard onOpenRegistrationModal={(conf) => setSelectedConferenceForReg(conf)} />
+        )}
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 bg-[#001e42] py-6 px-4 text-center text-xs text-slate-300 mt-12">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="font-black text-white text-sm">xyz</span>
-            <span>•</span>
-            <span className="uppercase tracking-wider font-extrabold text-slate-300">Learning and Devlopemnt department</span>
+      <footer style={{
+        background: 'var(--grad-navy)', padding: '20px 32px',
+        borderTop: '3px solid rgba(0,156,222,0.4)'
+      }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontSize: 18, fontWeight: 900, color: '#fff', letterSpacing: 1 }}>xyz</span>
+            <span style={{ color: 'rgba(255,255,255,0.4)' }}>|</span>
+            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', fontWeight: 600, letterSpacing: 0.5 }}>
+              Learning and Development Department
+            </span>
+            <span style={{
+              fontSize: 10, padding: '3px 10px', borderRadius: 999,
+              background: 'rgba(0,156,222,0.3)', color: '#fff', fontWeight: 700, border: '1px solid rgba(0,156,222,0.4)'
+            }}>TLCE LMS</span>
           </div>
-          <div className="font-semibold text-slate-300">
-            Enterprise L&D Automation Platform • Logged in as {currentUser.name} ({currentUser.role})
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>
+            Logged in as <strong style={{ color: '#fff' }}>{currentUser.name}</strong> · {currentUser.role}
           </div>
         </div>
       </footer>
 
-      {/* Modals & Floating Drawers */}
+      {/* Modals */}
       {selectedConferenceForReg && (
         <RegistrationModal
           conference={selectedConferenceForReg}
           onClose={() => setSelectedConferenceForReg(null)}
         />
       )}
-
-      <EmailInboxDrawer
-        isOpen={isEmailInboxOpen}
-        onClose={() => setIsEmailInboxOpen(false)}
-      />
-
-      <CreateConferenceModal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-      />
-
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-      />
-
-      {/* Floating Bottom-Right Chatbot Widget */}
+      <EmailInboxDrawer isOpen={isEmailInboxOpen} onClose={() => setIsEmailInboxOpen(false)} />
+      <CreateConferenceModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
       <ChatBot />
-
-      {/* Floating Toast Alerts */}
       <Toast />
-
     </div>
   );
 };
 
 export default function App() {
-  return (
-    <LDProvider>
-      <MainApp />
-    </LDProvider>
-  );
+  return (<LDProvider><MainApp /></LDProvider>);
 }
