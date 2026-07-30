@@ -102,7 +102,7 @@ export const LDProvider = ({ children }) => {
 
     setEmails(prev => [newEmail, ...prev]);
 
-    // 1. Direct Browser EmailJS API Call (Lands in physical Gmail App inbox)
+    // 1. Direct Browser EmailJS API Call (Maps all standard variables to template_m1fgbz3)
     try {
       const emailjsRes = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
@@ -113,9 +113,15 @@ export const LDProvider = ({ children }) => {
           user_id: EMAILJS_PUBLIC_KEY,
           template_params: {
             to_email: recipientEmail,
+            email: recipientEmail,
+            user_email: recipientEmail,
+            reply_to: recipientEmail,
             to_name: recipientName,
+            name: recipientName,
+            user_name: recipientName,
             subject: subject,
             message: preview || content,
+            content: content,
             message_html: content,
             from_name: 'xyz Learning & Development Department'
           }
@@ -125,6 +131,9 @@ export const LDProvider = ({ children }) => {
       if (emailjsRes.ok) {
         showToast(`📩 Automated Email Sent to ${recipientName} (${recipientEmail})!`, 'success');
         return;
+      } else {
+        const errText = await emailjsRes.text();
+        console.log('EmailJS response note:', errText);
       }
     } catch (err) {
       console.log('Browser EmailJS dispatch log:', err.message);
