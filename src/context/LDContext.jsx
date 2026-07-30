@@ -6,7 +6,7 @@ const LDContext = createContext();
 
 // Provided EmailJS Credentials
 const EMAILJS_SERVICE_ID = 'service_ert6lhj';
-const EMAILJS_TEMPLATE_ID = 'template_m1fgbz3';
+const EMAILJS_TEMPLATE_ID = 'template_yz6asi8';
 const EMAILJS_PUBLIC_KEY = 'ib1woyeUqWLxLdbFd';
 
 export const LDProvider = ({ children }) => {
