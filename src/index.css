@@ -484,5 +484,33 @@ h1, h2, h3, h4, h5, h6 {
     margin-left: 0 !important;
     text-align: left !important;
   }
+
+  /* Catalog Control/Filter Bar adjustments */
+  .resp-control-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+    padding: 16px !important;
+  }
+  .resp-search-box {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  .resp-filter-wrapper {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+  .resp-category-pills {
+    width: 100% !important;
+    overflow-x: auto !important;
+    padding-bottom: 4px !important;
+  }
+  .resp-audience-select {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
 }
+
 

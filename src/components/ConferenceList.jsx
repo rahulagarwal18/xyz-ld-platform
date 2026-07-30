@@ -30,13 +30,13 @@ export const ConferenceList = ({ onSelectConference }) => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
       {/* Control Bar */}
-      <div style={{
+      <div className="resp-control-bar" style={{
         background: 'var(--n-white)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--n-gray-border)',
         padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         flexWrap: 'wrap', gap: 12
       }}>
         {/* Search */}
-        <div style={{ position: 'relative', flex: '1 1 260px', maxWidth: 360 }}>
+        <div className="resp-search-box" style={{ position: 'relative', flex: '1 1 260px', maxWidth: 360 }}>
           <Search size={15} color="var(--n-gray-mid)" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }} />
           <input
             className="form-input"
@@ -48,9 +48,9 @@ export const ConferenceList = ({ onSelectConference }) => {
           />
         </div>
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center' }}>
+        <div className="resp-filter-wrapper" style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center' }}>
           {/* Category Pills */}
-          <div style={{
+          <div className="resp-category-pills" style={{
             display: 'flex', alignItems: 'center', gap: 4, overflowX: 'auto',
             background: 'var(--n-gray-light)', padding: '4px 6px', borderRadius: 10,
             border: '1px solid var(--n-gray-border)'
@@ -70,9 +70,11 @@ export const ConferenceList = ({ onSelectConference }) => {
           </div>
 
           {/* Audience Filter */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--n-gray-light)', padding: '6px 12px', borderRadius: 10, border: '1px solid var(--n-gray-border)' }}>
-            <Filter size={13} color="var(--n-blue)" />
-            <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--n-gray-mid)' }}>Audience:</span>
+          <div className="resp-audience-select" style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--n-gray-light)', padding: '6px 12px', borderRadius: 10, border: '1px solid var(--n-gray-border)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Filter size={13} color="var(--n-blue)" />
+              <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--n-gray-mid)' }}>Audience:</span>
+            </div>
             <select
               value={selectedAudience}
               onChange={e => setSelectedAudience(e.target.value)}
