@@ -51,26 +51,28 @@ const MainApp = () => {
         )}
 
         {/* Section header bar */}
-        <div style={{
+        <div className="resp-title-bar" style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           borderBottom: '2px solid var(--n-gray-border)', paddingBottom: 14
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <h2 style={{ fontSize: 20, color: 'var(--n-navy-dark)', fontWeight: 800 }}>
+          <div className="resp-title-left" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <h2 style={{ fontSize: 20, color: 'var(--n-navy-dark)', fontWeight: 800, margin: 0 }}>
               {TAB_LABELS[activeTab]}
             </h2>
             <span style={{
               fontSize: 11, padding: '4px 12px', borderRadius: 999,
               background: 'var(--n-blue-pale)', color: 'var(--n-navy)',
               fontWeight: 700, border: '1px solid rgba(0,156,222,0.3)',
-              textTransform: 'uppercase', letterSpacing: 0.5
+              textTransform: 'uppercase', letterSpacing: 0.5,
+              whiteSpace: 'nowrap', flexShrink: 0
             }}>2026 Annual TLCE</span>
           </div>
           <div style={{
             display: 'flex', alignItems: 'center', gap: 8,
             fontSize: 12, color: 'var(--n-success)', fontWeight: 600,
             background: 'var(--n-success-bg)', padding: '6px 14px',
-            borderRadius: 999, border: '1px solid rgba(46,125,50,0.3)'
+            borderRadius: 999, border: '1px solid rgba(46,125,50,0.3)',
+            whiteSpace: 'nowrap', flexShrink: 0
           }}>
             <ShieldCheck size={14} />
             {currentUser.email}

@@ -34,7 +34,7 @@ export const Header = ({ activeTab, setActiveTab, onOpenEmailInbox, onOpenCreate
             fontWeight: 900, fontSize: 13, color: '#fff',
             boxShadow: '0 2px 8px rgba(204,0,0,0.3)', border: '1.5px solid rgba(255,255,255,0.2)'
           }}>xyz</div>
-          <div>
+          <div className="resp-hide-mobile">
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <span style={{ fontSize: 15, fontWeight: 900, color: '#fff', letterSpacing: 0.3 }}>xyz</span>
               <span style={{
