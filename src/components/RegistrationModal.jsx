@@ -236,7 +236,7 @@ export const RegistrationModal = ({ conference, onClose }) => {
               )}
 
               {/* Name + Email */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div className="resp-grid-mobile-1" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <div>
                   <label className="form-label">Full Name</label>
                   <input
@@ -269,7 +269,7 @@ export const RegistrationModal = ({ conference, onClose }) => {
                       Complimentary
                     </span>
                   </label>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <div className="resp-grid-mobile-1" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                     {[
                       { value: 'Veg',     label: '🥗 Vegetarian' },
                       { value: 'Non-Veg', label: '🍗 Non-Vegetarian' },

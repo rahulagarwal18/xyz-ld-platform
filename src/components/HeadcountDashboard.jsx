@@ -35,7 +35,7 @@ export const HeadcountDashboard = ({ onOpenRegistrationModal }) => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
       {/* Program Selector */}
-      <div style={{
+      <div className="resp-dashboard-selector" style={{
         background: 'var(--n-white)', borderRadius: 'var(--radius-lg)',
         border: '1px solid var(--n-gray-border)', borderTop: '4px solid var(--n-navy)',
         padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16
@@ -51,7 +51,7 @@ export const HeadcountDashboard = ({ onOpenRegistrationModal }) => {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <Filter size={16} color="var(--n-navy)" />
           <select
-            className="form-input"
+            className="form-input resp-dashboard-select-input"
             value={selectedConfId}
             onChange={e => setSelectedConfId(e.target.value)}
             style={{ width: 320, fontWeight: 700, fontSize: 13 }}
@@ -62,14 +62,14 @@ export const HeadcountDashboard = ({ onOpenRegistrationModal }) => {
           </select>
         </div>
       </div>
-
+ 
       {/* Global Total Learning Hours Banner */}
-      <div style={{
+      <div className="resp-dashboard-hours-banner" style={{
         background: 'var(--grad-hero)', borderRadius: 'var(--radius-lg)',
         padding: '18px 24px', display: 'flex', alignItems: 'center', gap: 16
       }}>
         <Clock size={36} color="rgba(255,255,255,0.9)" />
-        <div>
+        <div style={{ flex: 1 }}>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: 1, fontWeight: 700 }}>
             Platform-Wide Total Learning Hours
           </div>
@@ -80,7 +80,7 @@ export const HeadcountDashboard = ({ onOpenRegistrationModal }) => {
             Calculated as: Σ(Program Duration × Registered Participants) across all 12 TLCE programs
           </div>
         </div>
-        <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+        <div className="resp-dashboard-hours-right" style={{ marginLeft: 'auto', textAlign: 'right' }}>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', marginBottom: 4 }}>This Program</div>
           <div style={{ fontSize: 22, fontWeight: 800, color: '#fff' }}>{confLearningHours} hrs</div>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>
