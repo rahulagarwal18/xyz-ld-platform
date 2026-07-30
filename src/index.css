@@ -57,6 +57,11 @@
   padding: 0;
 }
 
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
@@ -466,6 +471,7 @@ h1, h2, h3, h4, h5, h6 {
   .resp-banner-footer {
     padding: 10px 20px !important;
   }
+
   
   /* Dashboard adjustments */
   .resp-dashboard-selector {
@@ -495,6 +501,8 @@ h1, h2, h3, h4, h5, h6 {
   .resp-search-box {
     max-width: 100% !important;
     width: 100% !important;
+    flex: none !important;
+    flex-basis: auto !important;
   }
   .resp-filter-wrapper {
     flex-direction: column !important;

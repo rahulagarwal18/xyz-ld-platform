@@ -74,7 +74,7 @@ export const Header = ({ activeTab, setActiveTab, onOpenEmailInbox, onOpenCreate
                 }}
               >
                 <Icon size={12} />
-                <span>{tab.label}</span>
+                <span className="resp-hide-mobile">{tab.label}</span>
               </button>
             );
           })}
