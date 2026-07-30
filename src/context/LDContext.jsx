@@ -4,6 +4,11 @@ import confetti from 'canvas-confetti';
 
 const LDContext = createContext();
 
+// Provided EmailJS Credentials
+const EMAILJS_SERVICE_ID = 'service_ert6lhj';
+const EMAILJS_TEMPLATE_ID = 'template_m1fgbz3';
+const EMAILJS_PUBLIC_KEY = 'ib1woyeUqWLxLdbFd';
+
 export const LDProvider = ({ children }) => {
   const [users, setUsers] = useState(() => {
     const saved = localStorage.getItem('xyz_users');
@@ -80,6 +85,7 @@ export const LDProvider = ({ children }) => {
     }, 6000);
   };
 
+  // Dispatch automated email via browser EmailJS API
   const dispatchEmail = async ({ type, recipientEmail, recipientName, subject, preview, content, badgeColor = 'bg-[#0066cc]' }) => {
     const newEmail = {
       id: 'email-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
@@ -96,8 +102,37 @@ export const LDProvider = ({ children }) => {
 
     setEmails(prev => [newEmail, ...prev]);
 
+    // 1. Direct Browser EmailJS API Call (Lands in physical Gmail App inbox)
     try {
-      const res = await fetch('http://localhost:5000/api/send-email', {
+      const emailjsRes = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service_id: EMAILJS_SERVICE_ID,
+          template_id: EMAILJS_TEMPLATE_ID,
+          user_id: EMAILJS_PUBLIC_KEY,
+          template_params: {
+            to_email: recipientEmail,
+            to_name: recipientName,
+            subject: subject,
+            message: preview || content,
+            message_html: content,
+            from_name: 'xyz Learning & Development Department'
+          }
+        })
+      });
+
+      if (emailjsRes.ok) {
+        showToast(`📩 Automated Email Sent to ${recipientName} (${recipientEmail})!`, 'success');
+        return;
+      }
+    } catch (err) {
+      console.log('Browser EmailJS dispatch log:', err.message);
+    }
+
+    // 2. Server API fallback
+    try {
+      const res = await fetch('/api/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
