@@ -135,9 +135,10 @@ export const LDProvider = ({ children }) => {
       console.log('Browser EmailJS dispatch log:', err.message);
     }
 
-    // 2. Server API fallback
+    // 2. Production Vercel Relative API Endpoint (/api/send-email)
     try {
-      const res = await fetch('/api/send-email', {
+      const apiEndpoint = window.location.hostname === 'localhost' ? 'http://localhost:5000/api/send-email' : '/api/send-email';
+      const res = await fetch(apiEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
