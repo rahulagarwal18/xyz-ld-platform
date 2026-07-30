@@ -8,13 +8,52 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
-// Read Resend API key from environment variable
+// EmailJS Credentials
+const EMAILJS_SERVICE_ID = process.env.EMAILJS_SERVICE_ID || 'service_ert6lhj';
+const EMAILJS_TEMPLATE_ID = process.env.EMAILJS_TEMPLATE_ID || '';
+const EMAILJS_PUBLIC_KEY = process.env.EMAILJS_PUBLIC_KEY || '';
+
+// Resend API Key fallback
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 
 async function sendToPhysicalGmailInbox({ to, subject, html, recipientName }) {
   console.log(`✉️ Dispatching Email Request for: [${to}] | Subject: "${subject}"`);
 
-  // 1. Resend Cloud API
+  // 1. Try EmailJS API (Service ID: service_ert6lhj)
+  if (EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY) {
+    try {
+      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          service_id: EMAILJS_SERVICE_ID,
+          template_id: EMAILJS_TEMPLATE_ID,
+          user_id: EMAILJS_PUBLIC_KEY,
+          template_params: {
+            to_email: to,
+            to_name: recipientName,
+            subject: subject,
+            message_html: html,
+            from_name: 'xyz Learning & Development Department'
+          }
+        })
+      });
+
+      if (response.ok) {
+        console.log(`✅ REAL EMAIL DELIVERED VIA EMAILJS TO [${to}]`);
+        return { success: true, provider: 'EmailJS Service' };
+      } else {
+        const text = await response.text();
+        console.log(`⚠️ EmailJS Note for ${to}:`, text);
+      }
+    } catch (err) {
+      console.error(`⚠️ EmailJS fetch error for ${to}:`, err.message);
+    }
+  }
+
+  // 2. Try Resend Cloud API
   if (RESEND_API_KEY) {
     try {
       const response = await fetch('https://api.resend.com/emails', {
@@ -44,7 +83,7 @@ async function sendToPhysicalGmailInbox({ to, subject, html, recipientName }) {
     }
   }
 
-  // 2. High-speed Live Test Mailer Fallback
+  // 3. High-speed Live Test Mailer Fallback
   let testAccount = await nodemailer.createTestAccount();
   let testTransporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
