@@ -5,33 +5,33 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-/* --- Nielsen Brand Palette --- */
+/* --- Premium Executive Brand Palette --- */
 :root {
-  --n-navy:        #003087;
-  --n-navy-dark:   #00205B;
-  --n-navy-light:  #1A4DAA;
-  --n-red:         #CC0000;
-  --n-red-dark:    #990000;
-  --n-blue:        #009CDE;
-  --n-blue-light:  #33B5E8;
-  --n-blue-pale:   #E5F4FC;
-  --n-gray-dark:   #333333;
-  --n-gray-mid:    #767676;
-  --n-gray-light:  #F5F5F5;
-  --n-gray-border: #DDDDDD;
+  --n-navy:        #1E3A8A; /* Deep Royal Blue */
+  --n-navy-dark:   #0F172A; /* Midnight Slate */
+  --n-navy-light:  #2563EB; /* Sapphire Blue */
+  --n-red:         #EF4444; /* Coral Red */
+  --n-red-dark:    #B91C1C; /* Deep Crimson */
+  --n-blue:        #3B82F6; /* Bright Sapphire/Blue */
+  --n-blue-light:  #60A5FA; /* Light Sapphire */
+  --n-blue-pale:   #EFF6FF; /* Soft Pale Sapphire */
+  --n-gray-dark:   #1E293B; /* Slate 800 */
+  --n-gray-mid:    #64748B; /* Slate 500 */
+  --n-gray-light:  #F8FAFC; /* Slate 50 */
+  --n-gray-border: #E2E8F0; /* Slate 200 */
   --n-white:       #FFFFFF;
-  --n-success:     #2E7D32;
-  --n-success-bg:  #E8F5E9;
-  --n-warning:     #F57F17;
-  --n-warning-bg:  #FFF8E1;
-  --n-error:       #C62828;
-  --n-error-bg:    #FFEBEE;
+  --n-success:     #10B981; /* Emerald Green */
+  --n-success-bg:  #ECFDF5; /* Soft Emerald Pale */
+  --n-warning:     #F59E0B; /* Warm Amber */
+  --n-warning-bg:  #FEF3C7; /* Soft Amber Pale */
+  --n-error:       #EF4444; /* Soft Red */
+  --n-error-bg:    #FEF2F2; /* Soft Red Pale */
 
   /* Gradient shorthands */
   --grad-navy:  linear-gradient(135deg, var(--n-navy-dark) 0%, var(--n-navy) 60%, var(--n-navy-light) 100%);
   --grad-blue:  linear-gradient(135deg, var(--n-navy) 0%, var(--n-blue) 100%);
   --grad-red:   linear-gradient(135deg, var(--n-red-dark) 0%, var(--n-red) 100%);
-  --grad-hero:  linear-gradient(135deg, #00205B 0%, #003087 50%, #009CDE 100%);
+  --grad-hero:  linear-gradient(135deg, var(--n-navy-dark) 0%, var(--n-navy) 50%, var(--n-blue) 100%);
 
   /* Shadows */
   --shadow-sm:  0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
