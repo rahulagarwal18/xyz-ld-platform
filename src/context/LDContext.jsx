@@ -23,6 +23,16 @@ export const LDProvider = ({ children }) => {
   });
 
   const [conferences, setConferences] = useState(() => {
+    const VKEY = 'xyz_conferences_v5_reset';
+    const isUpToDate = localStorage.getItem(VKEY) === 'true';
+
+    if (!isUpToDate) {
+      localStorage.removeItem('xyz_conferences');
+      localStorage.setItem(VKEY, 'true');
+      localStorage.setItem('xyz_conferences', JSON.stringify(INITIAL_CONFERENCES));
+      return INITIAL_CONFERENCES;
+    }
+
     const saved = localStorage.getItem('xyz_conferences');
     if (saved) {
       try {
@@ -31,7 +41,6 @@ export const LDProvider = ({ children }) => {
           const init = INITIAL_CONFERENCES.find(ic => ic.id === c.id);
           return { ...c, image: init ? init.image : (c.image || 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=85') };
         });
-        localStorage.setItem('xyz_conferences', JSON.stringify(updated));
         return updated;
       } catch (e) { return INITIAL_CONFERENCES; }
     }

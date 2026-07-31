@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Calendar, Clock, MapPin, Users, Award, Utensils, Car, ClipboardList, CheckCircle, Zap, Shield, ArrowRight, UserCheck } from 'lucide-react';
+import { X, Calendar, Clock, MapPin, Users, Award, Utensils, ClipboardList, CheckCircle, Zap, ArrowRight, UserCheck, BookOpen, Target, ShieldCheck } from 'lucide-react';
 import { useLD } from '../context/LDContext';
 
 export const ProgramDetailsModal = ({ conference, onClose, onRegister }) => {
@@ -13,205 +13,164 @@ export const ProgramDetailsModal = ({ conference, onClose, onRegister }) => {
   const isFull = seatsLeft <= 0;
   const pct = Math.round((conference.registeredCount / conference.totalSeats) * 100);
 
+  const fallbackDesc = `${conference.title} is an intensive flagship program curated by xyz Learning & Development. This session empowers teams with practical frameworks, strategic tools, and actionable insights to excel in enterprise workflows.`;
+
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 1000,
-      background: 'rgba(15,23,42,0.75)', backdropFilter: 'blur(8px)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: 16
-    }} onClick={onClose}>
-      <div style={{
-        background: '#ffffff', borderRadius: 24,
-        maxWidth: 680, width: '100%', maxHeight: '90vh',
-        display: 'flex', flexDirection: 'column',
-        boxShadow: '0 25px 50px -12px rgba(0,0,0,0.35)', overflow: 'hidden',
-        animation: 'modalSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
-      }} onClick={e => e.stopPropagation()}>
+    <div
+      className="modal-backdrop"
+      style={{ zIndex: 1000, background: 'rgba(0, 32, 91, 0.65)', backdropFilter: 'blur(6px)' }}
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div className="modal-container" style={{ maxWidth: 620, animation: 'modalSlide 0.25s ease' }}>
 
-        {/* ── Header Banner ── */}
-        <div style={{
-          position: 'relative', height: 200, overflow: 'hidden', background: '#0F172A'
-        }}>
-          <img
-            src={conference.image}
-            alt={conference.title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.4) 100%)' }} />
-
-          {/* Close button */}
+        {/* ── Modal Header ── */}
+        <div className="modal-header" style={{ position: 'relative', padding: '24px 28px' }}>
           <button
             onClick={onClose}
             style={{
-              position: 'absolute', top: 16, right: 16, zIndex: 10,
-              width: 36, height: 36, borderRadius: '50%', border: 'none',
-              background: 'rgba(15,23,42,0.6)', color: '#ffffff', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              backdropFilter: 'blur(4px)'
+              position: 'absolute', top: 16, right: 16,
+              background: 'rgba(255,255,255,0.18)', border: 'none',
+              borderRadius: 8, color: '#fff', cursor: 'pointer',
+              padding: 6, display: 'flex', lineHeight: 0
             }}
           >
             <X size={18} />
           </button>
 
-          {/* Banner Title Details */}
-          <div style={{ position: 'absolute', bottom: 20, left: 24, right: 24, color: '#ffffff' }}>
-            <div style={{ display: 'flex', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
-              <span style={{
-                fontSize: 11, fontWeight: 800, padding: '4px 12px', borderRadius: 999,
-                background: '#4F46E5', color: '#ffffff'
-              }}>
-                {conference.category}
-              </span>
-              <span style={{
-                fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 999,
-                background: 'rgba(255,255,255,0.2)', color: '#ffffff', backdropFilter: 'blur(4px)'
-              }}>
-                {conference.bannerTag || 'TLCE Program'}
-              </span>
-            </div>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
+            <span style={{
+              fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 999,
+              background: 'var(--n-blue)', color: '#fff', textTransform: 'uppercase', letterSpacing: 0.8
+            }}>
+              {conference.category}
+            </span>
+            <span style={{
+              fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 999,
+              background: 'rgba(255,255,255,0.2)', color: '#fff', backdropFilter: 'blur(4px)'
+            }}>
+              {conference.bannerTag || 'TLCE 2026'}
+            </span>
+          </div>
 
-            <h2 style={{ fontSize: 22, fontWeight: 900, color: '#ffffff', margin: 0, lineHeight: 1.25, letterSpacing: '-0.3px' }}>
-              {conference.title}
-            </h2>
-            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginTop: 4, fontWeight: 500 }}>
-              {conference.subtitle}
-            </div>
+          <h3 style={{ color: '#fff', fontSize: 22, fontWeight: 900, margin: 0, paddingRight: 36, lineHeight: 1.25 }}>
+            {conference.title}
+          </h3>
+          <p style={{ opacity: 0.85, fontSize: 13, marginTop: 6, margin: '6px 0 0', fontWeight: 500 }}>
+            {conference.subtitle}
+          </p>
+
+          {/* Event Quick Strip */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 14, fontSize: 12, color: 'rgba(255,255,255,0.9)' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+              <Calendar size={13} color="var(--n-blue-light)" /> {conference.date}
+            </span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+              <Clock size={13} color="var(--n-blue-light)" /> {conference.time} ({conference.durationHours}h)
+            </span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+              <MapPin size={13} color="var(--n-blue-light)" /> {conference.location}
+            </span>
           </div>
         </div>
 
-        {/* ── Scrollable Body Content ── */}
-        <div style={{ overflowY: 'auto', flex: 1, padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+        {/* ── Modal Body Content ── */}
+        <div style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 20 }}>
 
-          {/* Quick Info Grid */}
-          <div style={{
-            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12,
-            background: '#F8FAFC', padding: 16, borderRadius: 16, border: '1px solid #E2E8F0'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <Calendar size={18} color="#4F46E5" />
-              <div>
-                <div style={{ fontSize: 11, color: '#64748B', fontWeight: 600 }}>Date</div>
-                <div style={{ fontSize: 13, color: '#0F172A', fontWeight: 700 }}>{conference.date}</div>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <Clock size={18} color="#0EA5E9" />
-              <div>
-                <div style={{ fontSize: 11, color: '#64748B', fontWeight: 600 }}>Timing &amp; Duration</div>
-                <div style={{ fontSize: 13, color: '#0F172A', fontWeight: 700 }}>{conference.time} ({conference.durationHours}h)</div>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <MapPin size={18} color="#10B981" />
-              <div>
-                <div style={{ fontSize: 11, color: '#64748B', fontWeight: 600 }}>Venue / Stream</div>
-                <div style={{ fontSize: 13, color: '#0F172A', fontWeight: 700 }}>{conference.location}</div>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <Users size={18} color="#F43F5E" />
-              <div>
-                <div style={{ fontSize: 11, color: '#64748B', fontWeight: 600 }}>Seat Capacity</div>
-                <div style={{ fontSize: 13, color: '#0F172A', fontWeight: 700 }}>{conference.registeredCount}/{conference.totalSeats} Registered ({pct}%)</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Program Overview & Description */}
+          {/* Program Overview / Description */}
           <div>
-            <h3 style={{ fontSize: 15, fontWeight: 800, color: '#0F172A', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Award size={16} color="#4F46E5" /> About This TLCE Event
-            </h3>
-            <p style={{ fontSize: 14, color: '#334155', lineHeight: 1.6, margin: 0, fontWeight: 500 }}>
-              {conference.description}
-            </p>
+            <h4 style={{ fontSize: 14, fontWeight: 800, color: 'var(--n-navy-dark)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+              <BookOpen size={16} color="var(--n-navy)" /> Program Overview &amp; Description
+            </h4>
+            <div style={{
+              background: 'var(--n-gray-light)', padding: '16px 18px', borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--n-gray-border)', fontSize: 14, color: 'var(--n-gray-dark)',
+              lineHeight: 1.6, fontWeight: 500
+            }}>
+              {conference.description || fallbackDesc}
+            </div>
           </div>
 
-          {/* Highlight Summary */}
+          {/* Key Objective Highlight */}
           {conference.monthlyHighlight && (
             <div style={{
-              background: '#EEF2FF', borderLeft: '4px solid #4F46E5', borderRadius: '0 12px 12px 0',
-              padding: '12px 16px', fontSize: 13, color: '#3730A3', lineHeight: 1.5, fontWeight: 600
+              background: 'var(--n-blue-pale)', borderLeft: '4px solid var(--n-navy)',
+              borderRadius: '0 var(--radius-md) var(--radius-md) 0', padding: '12px 16px',
+              fontSize: 13, color: 'var(--n-navy-dark)', lineHeight: 1.5, fontWeight: 600
             }}>
-              💡 <strong>Key takeaway:</strong> {conference.monthlyHighlight}
+              🎯 <strong>Learning Outcome:</strong> {conference.monthlyHighlight}
             </div>
           )}
 
-          {/* Keynote Speaker */}
+          {/* Keynote Speaker Bio */}
           <div>
-            <h3 style={{ fontSize: 15, fontWeight: 800, color: '#0F172A', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <UserCheck size={16} color="#4F46E5" /> Featured Keynote Speaker
-            </h3>
+            <h4 style={{ fontSize: 14, fontWeight: 800, color: 'var(--n-navy-dark)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+              <UserCheck size={16} color="var(--n-navy)" /> Keynote Speaker
+            </h4>
             <div style={{
-              display: 'flex', alignItems: 'center', gap: 12, background: '#F8FAFC',
-              padding: '12px 16px', borderRadius: 12, border: '1px solid #E2E8F0'
+              display: 'flex', alignItems: 'center', gap: 14, background: 'var(--n-white)',
+              padding: '14px 16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--n-gray-border)',
+              boxShadow: 'var(--shadow-sm)'
             }}>
               <div style={{
-                width: 42, height: 42, borderRadius: '50%', background: '#4F46E5', color: '#ffffff',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 16
+                width: 44, height: 44, borderRadius: '50%', background: 'var(--grad-navy)', color: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: 18,
+                flexShrink: 0
               }}>
                 {conference.speaker ? conference.speaker[0] : 'S'}
               </div>
               <div>
-                <div style={{ fontSize: 14, fontWeight: 800, color: '#0F172A' }}>{conference.speaker}</div>
-                <div style={{ fontSize: 12, color: '#64748B', fontWeight: 500 }}>Leading Speaker &amp; Subject Matter Expert</div>
+                <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--n-navy-dark)' }}>{conference.speaker}</div>
+                <div style={{ fontSize: 12, color: 'var(--n-gray-mid)', fontWeight: 500, marginTop: 2 }}>
+                  Senior Subject Matter Expert · xyz L&amp;D Faculty
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Target Audience */}
-          <div>
-            <h3 style={{ fontSize: 15, fontWeight: 800, color: '#0F172A', marginBottom: 8 }}>Target Audience</h3>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              {(conference.targetAudience || []).map(aud => (
-                <span key={aud} style={{
-                  fontSize: 12, fontWeight: 700, padding: '5px 14px', borderRadius: 999,
-                  background: '#F1F5F9', color: '#475569', border: '1px solid #CBD5E1'
-                }}>
-                  {aud}
-                </span>
-              ))}
+          {/* Target Audience & Logistics */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
+            <div>
+              <h5 style={{ fontSize: 12, fontWeight: 800, color: 'var(--n-navy)', marginBottom: 6, textTransform: 'uppercase' }}>
+                Target Audience
+              </h5>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {(conference.targetAudience || ['All Employees']).map(aud => (
+                  <span key={aud} className="badge badge-blue" style={{ fontSize: 11 }}>{aud}</span>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Event Perks & Logistics */}
-          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-            {conference.hasMeal && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#10B981', fontWeight: 700, background: '#ECFDF5', padding: '6px 12px', borderRadius: 8, border: '1px solid #A7F3D0' }}>
-                <Utensils size={14} /> Complimentary Meal Provided
+            <div>
+              <h5 style={{ fontSize: 12, fontWeight: 800, color: 'var(--n-navy)', marginBottom: 6, textTransform: 'uppercase' }}>
+                Inclusions &amp; Logistics
+              </h5>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {conference.hasMeal && <span className="badge badge-green" style={{ fontSize: 11 }}><Utensils size={11} /> Meal Included</span>}
+                {conference.hasAssessment && <span className="badge badge-navy" style={{ fontSize: 11 }}><ClipboardList size={11} /> Assessment</span>}
+                <span className="badge badge-gray" style={{ fontSize: 11 }}><Users size={11} /> {conference.registeredCount}/{conference.totalSeats} Enrolled</span>
               </div>
-            )}
-            {conference.hasAssessment && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#4F46E5', fontWeight: 700, background: '#EEF2FF', padding: '6px 12px', borderRadius: 8, border: '1px solid #C7D2FE' }}>
-                <ClipboardList size={14} /> Includes Pre &amp; Post Assessment
-              </div>
-            )}
+            </div>
           </div>
 
         </div>
 
-        {/* ── Footer CTA ── */}
+        {/* ── Modal Footer Actions ── */}
         <div style={{
-          padding: '16px 28px', borderTop: '1px solid #E2E8F0', background: '#F8FAFC',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12
+          padding: '16px 28px', borderTop: '1px solid var(--n-gray-border)', background: 'var(--n-gray-light)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
+          borderRadius: '0 0 var(--radius-xl) var(--radius-xl)'
         }}>
           <div>
-            <div style={{ fontSize: 12, color: '#64748B', fontWeight: 600 }}>Registration Status</div>
-            <div style={{ fontSize: 14, fontWeight: 800, color: full ? '#F43F5E' : '#10B981' }}>
-              {full ? 'Fully Booked (Waitlist Open)' : `${seatsLeft} Seats Available`}
+            <div style={{ fontSize: 11, color: 'var(--n-gray-mid)', fontWeight: 600, textTransform: 'uppercase' }}>Seat Availability</div>
+            <div style={{ fontSize: 13, fontWeight: 800, color: isFull ? 'var(--n-red)' : 'var(--n-success)' }}>
+              {isFull ? '● Full Capacity (Waitlist)' : `● ${seatsLeft} Seats Remaining (${pct}% filled)`}
             </div>
           </div>
 
           <div style={{ display: 'flex', gap: 10 }}>
             <button
               onClick={onClose}
-              style={{
-                padding: '10px 18px', borderRadius: 10, border: '1px solid #CBD5E1',
-                background: '#ffffff', color: '#475569', fontWeight: 700, fontSize: 13, cursor: 'pointer'
-              }}
+              className="btn btn-secondary btn-sm"
             >
               Close
             </button>
@@ -219,16 +178,11 @@ export const ProgramDetailsModal = ({ conference, onClose, onRegister }) => {
             {conference.status !== 'Completed' && (
               <button
                 onClick={() => { onClose(); onRegister(conference); }}
-                style={{
-                  padding: '10px 22px', borderRadius: 10, border: 'none',
-                  background: isRegistered ? '#10B981' : full ? '#F43F5E' : '#4F46E5',
-                  color: '#ffffff', fontWeight: 800, fontSize: 14, cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', gap: 8,
-                  boxShadow: '0 4px 14px rgba(79,70,229,0.3)'
-                }}
+                className={`btn ${isRegistered ? 'btn-success' : isFull ? 'btn-danger' : 'btn-primary'} btn-md`}
+                style={{ fontWeight: 800 }}
               >
-                {isRegistered ? 'View Registration' : full ? 'Join Waitlist' : 'Register Now'}
-                <ArrowRight size={16} />
+                {isRegistered ? 'View Registration' : isFull ? 'Join Waitlist' : 'Register Now'}
+                <ArrowRight size={15} />
               </button>
             )}
           </div>
