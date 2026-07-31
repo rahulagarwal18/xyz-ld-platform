@@ -36,9 +36,9 @@ const ToggleSwitch = ({ checked, onChange }) => (
 export const RegistrationModal = ({ conference, onClose }) => {
   const { currentUser, registerForConference, addToWaitlist, registrations } = useLD();
 
-  const [userName, setUserName]               = useState(currentUser.name);
-  const [userEmail, setUserEmail]             = useState(currentUser.email);
-  const [department]                          = useState(currentUser.department || 'Engineering');
+  const [userName, setUserName]               = useState(currentUser?.name || '');
+  const [userEmail, setUserEmail]             = useState(currentUser?.email || '');
+  const [department]                          = useState(currentUser?.department || 'Engineering');
   const [mealPreference, setMealPreference]   = useState('Veg');
   const [needCab, setNeedCab]                 = useState(false);
   const [cabPickupLocation, setCabPickupLocation] = useState('City Tech Park Shuttle Station');
@@ -51,15 +51,15 @@ export const RegistrationModal = ({ conference, onClose }) => {
   const isFull           = conference.registeredCount >= conference.totalSeats;
   const seatsLeft        = conference.totalSeats - conference.registeredCount;
   const pct              = Math.round((conference.registeredCount / conference.totalSeats) * 100);
-  const alreadyRegistered = registrations.some(r => r.conferenceId === conference.id && r.userEmail === currentUser.email);
-  const onWaitlist       = (conference.waitlist || []).some(w => w.email === currentUser.email);
+  const alreadyRegistered = registrations.some(r => r.conferenceId === conference.id && r.userEmail === currentUser?.email);
+  const onWaitlist       = (conference.waitlist || []).some(w => w.email === currentUser?.email);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setSubmitting(true);
     const res = registerForConference({
       conferenceId: conference.id,
-      userInfo: { id: currentUser.id, name: userName, email: userEmail, department },
+      userInfo: { id: currentUser?.id || 'user_' + Date.now(), name: userName, email: userEmail, department },
       mealPreference: conference.hasMeal ? mealPreference : null,
       needCab, cabPickupLocation, cabPickupSlot
     });
