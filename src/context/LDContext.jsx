@@ -141,6 +141,9 @@ export const LDProvider = ({ children }) => {
     };
     setEmails(prev => [newEmail, ...prev]);
 
+    // Strip HTML tags for clean EmailJS plain text template compatibility
+    const plainMessage = (preview || content || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
     // EmailJS browser dispatch
     try {
       const emailjsRes = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
@@ -153,21 +156,29 @@ export const LDProvider = ({ children }) => {
           template_params: {
             to_email: recipientEmail,
             email: recipientEmail,
+            user_email: recipientEmail,
+            recipient_email: recipientEmail,
             name: recipientName,
             to_name: recipientName,
             title: subject,
             subject: subject,
-            message: preview || content,
+            message: plainMessage,
             time: new Date().toLocaleTimeString() + ' ' + new Date().toLocaleDateString()
           }
         })
       });
+
+      const respText = await emailjsRes.text();
+      console.log('EmailJS Dispatch Status:', emailjsRes.status, respText);
+
       if (emailjsRes.ok) {
-        showToast(`📩 Email Delivered to ${recipientName}!`, 'success');
+        showToast(`📩 Confirmation email dispatched to ${recipientEmail}! (Check inbox / spam)`, 'success');
         return;
+      } else {
+        console.warn('EmailJS API warning:', respText);
       }
     } catch (err) {
-      console.log('EmailJS:', err.message);
+      console.error('EmailJS Error:', err);
     }
 
     // Fallback: Vercel API
