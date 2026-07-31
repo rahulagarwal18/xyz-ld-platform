@@ -3,12 +3,17 @@ import { useLD } from '../context/LDContext';
 import { X, Mail, RefreshCw, ExternalLink, ShieldCheck } from 'lucide-react';
 
 export const EmailInboxDrawer = ({ isOpen, onClose }) => {
-  const { emails, markEmailRead, completeEventAutomations, conferences } = useLD();
+  const { emails, markEmailRead, completeEventAutomations, conferences, currentUser } = useLD();
   const [filterType, setFilterType] = useState('All');
 
   if (!isOpen) return null;
 
-  const filteredEmails = emails.filter(e => {
+  const isAdmin = currentUser?.role === 'Admin';
+  const userEmails = isAdmin
+    ? emails
+    : emails.filter(e => e.recipientEmail === currentUser?.email || e.recipientEmail === 'all-employees@xyz.com');
+
+  const filteredEmails = userEmails.filter(e => {
     if (filterType === 'All') return true;
     return e.type === filterType;
   });
