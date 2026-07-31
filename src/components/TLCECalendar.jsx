@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLD } from '../context/LDContext';
-import { Calendar, MapPin, Users, Clock, ChevronRight, AlertCircle, CheckCircle, Target, Zap, Award, BarChart3, MessageSquare, Bot, Palette, Cloud, Rocket, DollarSign, Handshake, Lightbulb, Sparkles, Quote } from 'lucide-react';
+import { Calendar, MapPin, Users, Clock, ChevronRight, AlertCircle, CheckCircle, Target, Zap, Award, BarChart3, MessageSquare, Bot, Palette, Cloud, Rocket, DollarSign, Handshake, Lightbulb, Sparkles, Info } from 'lucide-react';
+import { ProgramDetailsModal } from './ProgramDetailsModal';
 
 const MONTH_ICONS = [
   Target,       // Jan: Strategy
@@ -61,6 +62,7 @@ const StatusBadge = ({ conf }) => {
 export const TLCECalendar = ({ onSelectConference }) => {
   const { conferences, registrations, currentUser } = useLD();
   const [hoveredId, setHoveredId] = useState(null);
+  const [viewDetailsConf, setViewDetailsConf] = useState(null);
 
   // Sort by monthIndex
   const sorted = [...conferences].sort((a, b) => a.monthIndex - b.monthIndex);
@@ -199,7 +201,7 @@ export const TLCECalendar = ({ onSelectConference }) => {
                   </div>
                 </div>
 
-                {/* ── Executive Highlight Box (Replaces Serif Italic) ── */}
+                {/* ── Executive Highlight Box ── */}
                 <div style={{
                   background: '#F8FAFC',
                   borderLeft: `3px solid ${accent}`,
@@ -244,32 +246,34 @@ export const TLCECalendar = ({ onSelectConference }) => {
                   </div>
                 </div>
 
-                {/* ── CTA Button ── */}
+                {/* ── CTA Action Buttons ── */}
                 {conf.status !== 'Completed' && (
-                  <button
-                    onClick={(e) => { e.stopPropagation(); onSelectConference(conf); }}
-                    style={{
-                      width: '100%',
-                      padding: '10px 16px',
-                      borderRadius: 10,
-                      border: 'none',
-                      background: registered ? '#EEF2FF' : full ? '#F43F5E' : accent,
-                      color: registered ? '#4F46E5' : '#ffffff',
-                      fontWeight: 700,
-                      fontSize: 13,
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: 6,
-                      marginTop: 4,
-                      boxShadow: registered ? 'none' : '0 2px 8px rgba(0,0,0,0.1)',
-                      transition: 'all 0.15s ease'
-                    }}
-                  >
-                    {registered ? 'View Registration' : full ? 'Join Waitlist' : 'Register Now'}
-                    <ChevronRight size={14} />
-                  </button>
+                  <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setViewDetailsConf(conf); }}
+                      style={{
+                        flex: 1, padding: '10px 12px', borderRadius: 10,
+                        border: '1px solid #CBD5E1', background: '#F8FAFC',
+                        color: '#475569', fontWeight: 700, fontSize: 12,
+                        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5
+                      }}
+                    >
+                      <Info size={13} /> Overview
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onSelectConference(conf); }}
+                      style={{
+                        flex: 1.2, padding: '10px 14px', borderRadius: 10,
+                        border: 'none', background: registered ? '#EEF2FF' : full ? '#F43F5E' : accent,
+                        color: registered ? '#4F46E5' : '#ffffff', fontWeight: 700, fontSize: 12,
+                        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
+                        boxShadow: registered ? 'none' : '0 2px 8px rgba(0,0,0,0.1)'
+                      }}
+                    >
+                      {registered ? 'Registered' : full ? 'Waitlist' : 'Register'}
+                      <ChevronRight size={13} />
+                    </button>
+                  </div>
                 )}
 
               </div>
@@ -277,6 +281,15 @@ export const TLCECalendar = ({ onSelectConference }) => {
           );
         })}
       </div>
+
+      {/* Program Details Modal */}
+      {viewDetailsConf && (
+        <ProgramDetailsModal
+          conference={viewDetailsConf}
+          onClose={() => setViewDetailsConf(null)}
+          onRegister={(c) => onSelectConference(c)}
+        />
+      )}
     </div>
   );
 };

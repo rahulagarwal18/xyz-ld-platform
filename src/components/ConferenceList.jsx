@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useLD } from '../context/LDContext';
-import { Search, Filter, Calendar, Clock, MapPin, ArrowRight, CheckCircle2, BookOpen, MessageSquare, Users, ClipboardList, Utensils, Zap, Bell, CheckCircle } from 'lucide-react';
+import { Search, Filter, Calendar, Clock, MapPin, ArrowRight, CheckCircle2, BookOpen, MessageSquare, Users, ClipboardList, Utensils, Zap, Bell, CheckCircle, Info } from 'lucide-react';
 import { AssessmentModal } from './AssessmentModal';
 import { FeedbackModal } from './FeedbackModal';
+import { ProgramDetailsModal } from './ProgramDetailsModal';
 
 export const ConferenceList = ({ onSelectConference }) => {
   const { conferences, registrations, currentUser, assessmentResults } = useLD();
@@ -12,6 +13,7 @@ export const ConferenceList = ({ onSelectConference }) => {
   const [selectedAudience, setSelectedAudience] = useState('All');
   const [assessmentModal, setAssessmentModal] = useState(null);
   const [feedbackModal, setFeedbackModal] = useState(null);
+  const [viewDetailsConf, setViewDetailsConf] = useState(null);
 
   const filtered = conferences.filter(c => {
     const q = searchQuery.toLowerCase();
@@ -241,21 +243,39 @@ export const ConferenceList = ({ onSelectConference }) => {
                       )}
                     </>
                   ) : isFull ? (
-                    <button
-                      onClick={() => onSelectConference(conf)}
-                      className="btn btn-danger"
-                      style={{ width: '100%', justifyContent: 'center' }}
-                    >
-                      <Users size={14} /> {onWaitlist ? '✓ On Waitlist' : 'Join Waitlist'}
-                    </button>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <button
+                        onClick={() => setViewDetailsConf(conf)}
+                        className="btn btn-secondary btn-sm"
+                        style={{ flex: 1, justifyContent: 'center' }}
+                      >
+                        <Info size={13} /> Description
+                      </button>
+                      <button
+                        onClick={() => onSelectConference(conf)}
+                        className="btn btn-danger btn-sm"
+                        style={{ flex: 1, justifyContent: 'center' }}
+                      >
+                        <Users size={13} /> {onWaitlist ? 'On Waitlist' : 'Join Waitlist'}
+                      </button>
+                    </div>
                   ) : (
-                    <button
-                      onClick={() => onSelectConference(conf)}
-                      className="btn btn-primary"
-                      style={{ width: '100%', justifyContent: 'center' }}
-                    >
-                      Register Now <ArrowRight size={14} />
-                    </button>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <button
+                        onClick={() => setViewDetailsConf(conf)}
+                        className="btn btn-secondary btn-sm"
+                        style={{ flex: 1, justifyContent: 'center' }}
+                      >
+                        <Info size={13} /> Description
+                      </button>
+                      <button
+                        onClick={() => onSelectConference(conf)}
+                        className="btn btn-primary btn-sm"
+                        style={{ flex: 1, justifyContent: 'center' }}
+                      >
+                        Register <ArrowRight size={13} />
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
@@ -270,6 +290,15 @@ export const ConferenceList = ({ onSelectConference }) => {
           <p style={{ fontWeight: 600, fontSize: 16 }}>No TLCE programs match your search.</p>
           <p style={{ fontSize: 13, marginTop: 4 }}>Try a different keyword or clear the filters.</p>
         </div>
+      )}
+
+      {/* Program Details Overview Modal */}
+      {viewDetailsConf && (
+        <ProgramDetailsModal
+          conference={viewDetailsConf}
+          onClose={() => setViewDetailsConf(null)}
+          onRegister={(c) => onSelectConference(c)}
+        />
       )}
 
       {/* Assessment Modal */}
