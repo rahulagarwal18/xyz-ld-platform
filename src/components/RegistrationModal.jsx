@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLD } from '../context/LDContext';
-import { X, Utensils, Car, Send, Users, Clock, MapPin, AlertTriangle, List, CheckCircle } from 'lucide-react';
+import { X, Utensils, Car, Send, Users, Clock, MapPin, AlertTriangle, List, CheckCircle, Zap, ClipboardList, Leaf, UtensilsCrossed } from 'lucide-react';
 
 // ── Clean Toggle Switch (no double-fire bug) ────────────────────────────────
 const ToggleSwitch = ({ checked, onChange }) => (
