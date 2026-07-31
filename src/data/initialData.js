@@ -154,7 +154,7 @@ export const INITIAL_CONFERENCES = [
     location: 'Main Auditorium & Global Virtual Stream',
     speaker: 'Dr. Elena Rostova (Chief AI Officer)',
     bannerTag: 'Featured Keynote',
-    image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1200&q=85',
+    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=85',
     description: 'Transform how you work with state-of-the-art AI automation, prompt architectures, and local model integrations customized for xyz operations.',
     status: 'Upcoming',
     hasMeal: true,
