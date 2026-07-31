@@ -27,11 +27,12 @@ export const LDProvider = ({ children }) => {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        return parsed.map(c => {
+        const updated = parsed.map(c => {
           const init = INITIAL_CONFERENCES.find(ic => ic.id === c.id);
-          const validImg = init ? init.image : (c.image || 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=85');
-          return { ...c, image: validImg };
+          return { ...c, image: init ? init.image : (c.image || 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=85') };
         });
+        localStorage.setItem('xyz_conferences', JSON.stringify(updated));
+        return updated;
       } catch (e) { return INITIAL_CONFERENCES; }
     }
     return INITIAL_CONFERENCES;
