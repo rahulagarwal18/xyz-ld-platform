@@ -29,7 +29,8 @@ export const LDProvider = ({ children }) => {
         const parsed = JSON.parse(saved);
         return parsed.map(c => {
           const init = INITIAL_CONFERENCES.find(ic => ic.id === c.id);
-          return { ...c, image: c.image || (init ? init.image : '/images/ai_mindset.jpg') };
+          const validImg = (c.image && !c.image.startsWith('/images/')) ? c.image : (init ? init.image : 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=85');
+          return { ...c, image: validImg };
         });
       } catch (e) { return INITIAL_CONFERENCES; }
     }

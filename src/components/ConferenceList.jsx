@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLD } from '../context/LDContext';
-import { Search, Filter, Calendar, Clock, MapPin, ArrowRight, CheckCircle2, BookOpen, MessageSquare, Users, ClipboardList } from 'lucide-react';
+import { Search, Filter, Calendar, Clock, MapPin, ArrowRight, CheckCircle2, BookOpen, MessageSquare, Users, ClipboardList, Utensils, Zap, Bell, CheckCircle } from 'lucide-react';
 import { AssessmentModal } from './AssessmentModal';
 import { FeedbackModal } from './FeedbackModal';
 
@@ -24,7 +24,7 @@ export const ConferenceList = ({ onSelectConference }) => {
   const categories = ['All', ...new Set(conferences.map(c => c.category))];
   const audiences = ['All', 'Engineering', 'Leadership', 'Product', 'HR', 'All Employees', 'Design', 'Finance'];
 
-  const getFallbackImg = () => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80';
+  const getFallbackImg = () => 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=85';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -128,9 +128,9 @@ export const ConferenceList = ({ onSelectConference }) => {
                   {isFull && !isRegistered
                     ? <span style={{ fontSize: 10, fontWeight: 800, padding: '4px 10px', borderRadius: 999, background: 'rgba(204,0,0,0.9)', color: '#fff' }}>WAITLIST</span>
                     : pct >= 80 && !isRegistered
-                    ? <span style={{ fontSize: 10, fontWeight: 800, padding: '4px 10px', borderRadius: 999, background: 'rgba(245,127,23,0.9)', color: '#fff' }}>⚡ FILLING FAST</span>
+                    ? <span style={{ fontSize: 10, fontWeight: 800, padding: '4px 10px', borderRadius: 999, background: 'rgba(245,127,23,0.9)', color: '#fff', display: 'inline-flex', alignItems: 'center', gap: 3 }}><Zap size={10} /> FILLING FAST</span>
                     : isRegistered
-                    ? <span style={{ fontSize: 10, fontWeight: 800, padding: '4px 10px', borderRadius: 999, background: 'rgba(46,125,50,0.9)', color: '#fff' }}>✓ ENROLLED</span>
+                    ? <span style={{ fontSize: 10, fontWeight: 800, padding: '4px 10px', borderRadius: 999, background: 'rgba(46,125,50,0.9)', color: '#fff', display: 'inline-flex', alignItems: 'center', gap: 3 }}><CheckCircle size={10} /> ENROLLED</span>
                     : null}
                 </div>
                 <div style={{ position: 'absolute', bottom: 10, left: 10 }}>
@@ -154,10 +154,10 @@ export const ConferenceList = ({ onSelectConference }) => {
 
                 {/* Feature badges */}
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  {conf.hasMeal && <span className="badge badge-green" style={{ fontSize: 9 }}>🍽️ Meal</span>}
-                  {conf.hasAssessment && <span className="badge badge-navy" style={{ fontSize: 9 }}>📝 Assessment</span>}
-                  {conf.durationHours && <span className="badge badge-gray" style={{ fontSize: 9 }}>⏱️ {conf.durationHours}h</span>}
-                  {(conf.waitlist || []).length > 0 && <span className="badge badge-amber" style={{ fontSize: 9 }}>🔔 {(conf.waitlist || []).length} waitlisted</span>}
+                  {conf.hasMeal && <span className="badge badge-green" style={{ fontSize: 9, display: 'inline-flex', alignItems: 'center', gap: 4 }}><Utensils size={10} /> Meal</span>}
+                  {conf.hasAssessment && <span className="badge badge-navy" style={{ fontSize: 9, display: 'inline-flex', alignItems: 'center', gap: 4 }}><ClipboardList size={10} /> Assessment</span>}
+                  {conf.durationHours && <span className="badge badge-gray" style={{ fontSize: 9, display: 'inline-flex', alignItems: 'center', gap: 4 }}><Clock size={10} /> {conf.durationHours}h</span>}
+                  {(conf.waitlist || []).length > 0 && <span className="badge badge-amber" style={{ fontSize: 9, display: 'inline-flex', alignItems: 'center', gap: 4 }}><Bell size={10} /> {(conf.waitlist || []).length} waitlisted</span>}
                 </div>
 
                 {/* Schedule */}

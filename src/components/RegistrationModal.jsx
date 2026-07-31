@@ -220,7 +220,7 @@ export const RegistrationModal = ({ conference, onClose }) => {
                   borderRadius: 'var(--radius-md)', padding: '10px 14px',
                   display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#7B4F00', fontWeight: 600
                 }}>
-                  ⚡ Only {seatsLeft} seat{seatsLeft === 1 ? '' : 's'} left — register now!
+                  <Zap size={14} /> Only {seatsLeft} seat{seatsLeft === 1 ? '' : 's'} left — register now!
                 </div>
               )}
 
@@ -231,7 +231,7 @@ export const RegistrationModal = ({ conference, onClose }) => {
                   borderRadius: 'var(--radius-md)', padding: '10px 14px',
                   display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--n-navy)', fontWeight: 600
                 }}>
-                  📝 This program includes a <strong style={{ marginLeft: 4 }}>Pre &amp; Post Assessment</strong>.
+                  <ClipboardList size={14} /> This program includes a <strong style={{ marginLeft: 4 }}>Pre &amp; Post Assessment</strong>.
                 </div>
               )}
 
@@ -271,8 +271,8 @@ export const RegistrationModal = ({ conference, onClose }) => {
                   </label>
                   <div className="resp-grid-mobile-1" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                     {[
-                      { value: 'Veg',     label: '🥗 Vegetarian' },
-                      { value: 'Non-Veg', label: '🍗 Non-Vegetarian' },
+                      { value: 'Veg',     label: 'Vegetarian', Icon: Leaf },
+                      { value: 'Non-Veg', label: 'Non-Vegetarian', Icon: UtensilsCrossed },
                     ].map(opt => {
                       const active = mealPreference === opt.value;
                       return (
@@ -284,6 +284,7 @@ export const RegistrationModal = ({ conference, onClose }) => {
                             padding: '14px 16px',
                             borderRadius: 'var(--radius-md)',
                             cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                             border: `2px solid ${active ? 'var(--n-blue)' : 'var(--n-gray-border)'}`,
                             background: active ? 'var(--n-blue-pale)' : 'var(--n-white)',
                             color: active ? 'var(--n-navy)' : 'var(--n-gray-dark)',
@@ -293,6 +294,7 @@ export const RegistrationModal = ({ conference, onClose }) => {
                             transition: 'all 0.15s ease'
                           }}
                         >
+                          <opt.Icon size={16} />
                           {opt.label}
                         </button>
                       );

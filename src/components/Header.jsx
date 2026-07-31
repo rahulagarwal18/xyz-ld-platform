@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLD } from '../context/LDContext';
-import { Mail, Plus, LogOut, LayoutGrid, Calendar, BarChart3 } from 'lucide-react';
+import { Mail, Plus, LogOut, LayoutGrid, Calendar, Image, BarChart3, User } from 'lucide-react';
 
 export const Header = ({ activeTab, setActiveTab, onOpenEmailInbox, onOpenCreateModal }) => {
   const { currentUser, logoutUser, emails } = useLD();
@@ -9,6 +9,7 @@ export const Header = ({ activeTab, setActiveTab, onOpenEmailInbox, onOpenCreate
   const TABS = [
     { id: 'programs', label: 'TLCE Programs', icon: LayoutGrid },
     { id: 'calendar', label: 'Annual Calendar', icon: Calendar },
+    { id: 'gallery', label: 'Gallery', icon: Image },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   ];
 
@@ -67,13 +68,13 @@ export const Header = ({ activeTab, setActiveTab, onOpenEmailInbox, onOpenCreate
                   display: 'flex', alignItems: 'center', gap: 6,
                   padding: '6px 12px', borderRadius: 8, border: 'none', cursor: 'pointer',
                   fontSize: 11, fontWeight: 700,
-                  background: active ? 'var(--n-blue)' : 'transparent',
+                  background: active ? 'var(--n-navy)' : 'transparent',
                   color: active ? '#fff' : 'rgba(255,255,255,0.65)',
                   transition: 'all 0.15s ease',
                   whiteSpace: 'nowrap'
                 }}
               >
-                <Icon size={12} />
+                <Icon size={13} />
                 <span className="resp-hide-mobile">{tab.label}</span>
               </button>
             );
@@ -127,8 +128,10 @@ export const Header = ({ activeTab, setActiveTab, onOpenEmailInbox, onOpenCreate
             }}>
               <div style={{
                 width: 22, height: 22, borderRadius: 6,
-                background: 'rgba(0,156,222,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12
-              }}>{currentUser.avatar || '👤'}</div>
+                background: 'rgba(0,156,222,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}>
+                <User size={13} color="#fff" />
+              </div>
               <span className="resp-hide-mobile" style={{ fontSize: 11, fontWeight: 700, color: '#fff', maxWidth: 90, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {currentUser.name.split(' ')[0]}
               </span>

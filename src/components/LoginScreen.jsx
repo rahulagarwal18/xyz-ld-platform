@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLD } from '../context/LDContext';
-import { Mail, Lock, User, UserPlus, LogIn, ArrowRight, ShieldCheck, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, User, UserPlus, LogIn, ArrowRight, ShieldCheck, Eye, EyeOff, UserCheck } from 'lucide-react';
 
 const Field = ({ label, children }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 6, width: '100%' }}>
@@ -328,7 +328,7 @@ export const LoginScreen = () => {
                         }}
                       >
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                          <span style={{ fontSize: 14 }}>{u.avatar}</span>
+                          <UserCheck size={14} color="#003087" />
                           <span style={{ 
                             fontSize: 11, 
                             fontWeight: 700, 

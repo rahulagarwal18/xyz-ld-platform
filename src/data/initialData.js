@@ -19,7 +19,7 @@ export const USERS = [
     email: 'admin@xyz.com',
     role: 'Admin',
     department: 'Learning & Development',
-    avatar: '👑',
+    avatar: 'Admin',
     targetCategory: 'All'
   },
   {
@@ -28,7 +28,7 @@ export const USERS = [
     email: 'sarah.jenkins@xyz.com',
     role: 'Senior AI Engineer',
     department: 'Engineering',
-    avatar: '👩‍💻',
+    avatar: 'Engineer',
     targetCategory: 'Engineering'
   },
   {
@@ -37,7 +37,7 @@ export const USERS = [
     email: 'alex.rivera@xyz.com',
     role: 'Group Product Manager',
     department: 'Product',
-    avatar: '👨‍💼',
+    avatar: 'Product',
     targetCategory: 'Product'
   },
   {
@@ -46,7 +46,7 @@ export const USERS = [
     email: 'priya.sharma@xyz.com',
     role: 'HR Operations Lead',
     department: 'HR',
-    avatar: '👩‍🏫',
+    avatar: 'HR Lead',
     targetCategory: 'HR'
   }
 ];
@@ -70,7 +70,7 @@ export const INITIAL_CONFERENCES = [
     location: 'Executive Suite A & Live Webcast',
     speaker: 'Rajesh Kumar (VP Strategy)',
     bannerTag: 'Q1 Leadership Kickoff',
-    image: '/images/ai_mindset.jpg',
+    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=85',
     description: 'Develop the strategic mindset essential for navigating complex business landscapes, making high-stakes decisions, and communicating vision across xyz.',
     status: 'Completed',
     hasMeal: true,
@@ -98,7 +98,7 @@ export const INITIAL_CONFERENCES = [
     location: 'Innovation Hall B & Teams Stream',
     speaker: 'Dr. Kavya Reddy (Chief Analytics Officer)',
     bannerTag: 'Data Empowerment Series',
-    image: '/images/career_xyz.jpg',
+    image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=85',
     description: 'Learn to interpret business dashboards, validate KPIs, and build data-driven habits that accelerate decision velocity across all functions.',
     status: 'Completed',
     hasMeal: false,
@@ -126,7 +126,7 @@ export const INITIAL_CONFERENCES = [
     location: 'Training Center 2A & Virtual',
     speaker: 'Sneha Kapoor (Communication Coach)',
     bannerTag: 'Soft Skills Excellence',
-    image: '/images/leading_xyz.jpg',
+    image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=1200&q=85',
     description: 'Develop executive presence, master slide storytelling, and learn proven frameworks for delivering high-impact presentations that drive decisions.',
     status: 'Completed',
     hasMeal: false,
@@ -154,7 +154,7 @@ export const INITIAL_CONFERENCES = [
     location: 'Main Auditorium & Global Virtual Stream',
     speaker: 'Dr. Elena Rostova (Chief AI Officer)',
     bannerTag: 'Featured Keynote',
-    image: '/images/ai_mindset.jpg',
+    image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1200&q=85',
     description: 'Transform how you work with state-of-the-art AI automation, prompt architectures, and local model integrations customized for xyz operations.',
     status: 'Upcoming',
     hasMeal: true,
@@ -182,7 +182,7 @@ export const INITIAL_CONFERENCES = [
     location: 'Executive Suite A & Live Webcast',
     speaker: 'Marcus Vance (VP of Operations)',
     bannerTag: 'Executive Leadership Series',
-    image: '/images/leading_xyz.jpg',
+    image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=85',
     description: 'Master strategic decision-making, performance coaching, and fostering high-trust teams aligned with xyz strategic vision.',
     status: 'Upcoming',
     hasMeal: true,
@@ -210,7 +210,7 @@ export const INITIAL_CONFERENCES = [
     location: 'Design Studio 3B & Figma Live',
     speaker: 'Chloe Lin (Lead Product Designer)',
     bannerTag: 'UX Design Summit',
-    image: '/images/career_xyz.jpg',
+    image: 'https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&w=1200&q=85',
     description: 'Learn how xyz design token system ensures seamless accessibility, brand consistency, and high-velocity frontend development.',
     status: 'Upcoming',
     hasMeal: false,
@@ -238,7 +238,7 @@ export const INITIAL_CONFERENCES = [
     location: 'Tech Hub Room 402 & Teams Stream',
     speaker: 'David Thorne (Head of Infrastructure)',
     bannerTag: 'Deep Tech Series',
-    image: '/images/ai_mindset.jpg',
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=85',
     description: 'An architectural deep dive into resilient cloud infrastructure, security compliance, and microservices design at xyz scale.',
     status: 'Upcoming',
     hasMeal: true,
@@ -266,7 +266,7 @@ export const INITIAL_CONFERENCES = [
     location: 'Innovation Hall B & Global Stream',
     speaker: 'People Ops Leadership Team',
     bannerTag: 'Career Growth Summit',
-    image: '/images/leading_xyz.jpg',
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=85',
     description: 'Discover internal career pathways, mentorship pairing, promotion criteria, and continuous learning funds at xyz.',
     status: 'Upcoming',
     hasMeal: false,
@@ -294,7 +294,7 @@ export const INITIAL_CONFERENCES = [
     location: 'Conference Room D & Zoom',
     speaker: 'Pooja Agarwal (CFO, xyz)',
     bannerTag: 'Finance Intelligence Series',
-    image: '/images/career_xyz.jpg',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=85',
     description: 'Empower non-finance leaders with the financial literacy needed to own budgets, justify investments, and drive business outcomes.',
     status: 'Upcoming',
     hasMeal: true,
@@ -322,7 +322,7 @@ export const INITIAL_CONFERENCES = [
     location: 'Main Auditorium & Virtual',
     speaker: 'Divya Menon (Head of DEI)',
     bannerTag: 'Inclusion Excellence',
-    image: '/images/leading_xyz.jpg',
+    image: 'https://images.unsplash.com/photo-1531497865144-0464ef8fb9a9?auto=format&fit=crop&w=1200&q=85',
     description: 'An immersive workshop exploring unconscious bias, inclusive communication, allyship, and building psychologically safe workplaces at xyz.',
     status: 'Upcoming',
     hasMeal: false,
@@ -350,7 +350,7 @@ export const INITIAL_CONFERENCES = [
     location: 'Innovation Lab & Hybrid',
     speaker: 'xyz Innovation Council',
     bannerTag: 'Innovation Sprint',
-    image: '/images/ai_mindset.jpg',
+    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=85',
     description: 'A full-day bootcamp using design thinking methodologies to solve real xyz business challenges — from empathy mapping to rapid prototyping.',
     status: 'Upcoming',
     hasMeal: true,
@@ -378,7 +378,7 @@ export const INITIAL_CONFERENCES = [
     location: 'Main Auditorium & Global Stream',
     speaker: 'CEO & L&D Leadership Team',
     bannerTag: 'Annual Flagship',
-    image: '/images/leading_xyz.jpg',
+    image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=85',
     description: 'Join the entire xyz organization for our annual reflection ceremony — celebrating wins, acknowledging growth, and charting the course for 2027.',
     status: 'Upcoming',
     hasMeal: true,
@@ -388,6 +388,132 @@ export const INITIAL_CONFERENCES = [
     month: 'December',
     monthIndex: 11,
     waitlist: []
+  }
+];
+
+// Gallery Photos featuring last 3 months
+export const GALLERY_PHOTOS = [
+  // May 2026 (Month 1)
+  {
+    id: 'gal-may-1',
+    month: 'May 2026',
+    title: 'Leading at xyz Keynote Session',
+    program: 'Leading at xyz',
+    date: 'May 22, 2026',
+    location: 'Executive Suite A',
+    image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=85',
+    category: 'Leadership',
+    caption: 'Marcus Vance presenting managerial excellence and cross-functional alignment framework.',
+    views: 342,
+    likes: 89
+  },
+  {
+    id: 'gal-may-2',
+    month: 'May 2026',
+    title: 'Executive Networking Lunch',
+    program: 'Leading at xyz',
+    date: 'May 22, 2026',
+    location: 'Executive Lounge',
+    image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=85',
+    category: 'Networking',
+    caption: 'Cross-functional leaders engaging in strategic discussions over complimentary lunch.',
+    views: 215,
+    likes: 64
+  },
+  {
+    id: 'gal-may-3',
+    month: 'May 2026',
+    title: 'Team Empowerment Sprint',
+    program: 'Leading at xyz',
+    date: 'May 22, 2026',
+    location: 'Breakout Room 3',
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=85',
+    category: 'Workshop',
+    caption: 'Managers collaborating on building high-trust psychological safety in teams.',
+    views: 410,
+    likes: 112
+  },
+
+  // April 2026 (Month 2)
+  {
+    id: 'gal-apr-1',
+    month: 'April 2026',
+    title: 'AI Ready Mindset Keynote Address',
+    program: 'AI Ready Mindset',
+    date: 'Apr 15, 2026',
+    location: 'Main Auditorium',
+    image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1200&q=85',
+    category: 'Keynote',
+    caption: 'Dr. Elena Rostova demonstrating GenAI enterprise workflows and prompt architectures.',
+    views: 528,
+    likes: 145
+  },
+  {
+    id: 'gal-apr-2',
+    month: 'April 2026',
+    title: 'Prompt Engineering Hands-on Lab',
+    program: 'AI Ready Mindset',
+    date: 'Apr 15, 2026',
+    location: 'Innovation Lab A',
+    image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=85',
+    category: 'Hands-on Lab',
+    caption: 'Engineers & Product managers building LLM automation scripts live.',
+    views: 389,
+    likes: 98
+  },
+  {
+    id: 'gal-apr-3',
+    month: 'April 2026',
+    title: 'AI Assessment & Badge Ceremony',
+    program: 'AI Ready Mindset',
+    date: 'Apr 15, 2026',
+    location: 'Main Stage',
+    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=85',
+    category: 'Certificates',
+    caption: 'High-scoring participants receiving official AI Champion certifications.',
+    views: 472,
+    likes: 130
+  },
+
+  // March 2026 (Month 3)
+  {
+    id: 'gal-mar-1',
+    month: 'March 2026',
+    title: 'Presentation Mastery Stage Practice',
+    program: 'Effective Communication & Presentation',
+    date: 'Mar 18, 2026',
+    location: 'Training Center 2A',
+    image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=1200&q=85',
+    category: 'Soft Skills',
+    caption: 'Sneha Kapoor coaching attendees on executive stage presence and slide design.',
+    views: 310,
+    likes: 76
+  },
+  {
+    id: 'gal-mar-2',
+    month: 'March 2026',
+    title: 'Executive Storytelling Sprint',
+    program: 'Effective Communication & Presentation',
+    date: 'Mar 18, 2026',
+    location: 'Interactive Studio B',
+    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=85',
+    category: 'Workshop',
+    caption: 'Small group pitch exercises and constructive peer feedback in real time.',
+    views: 285,
+    likes: 82
+  },
+  {
+    id: 'gal-mar-3',
+    month: 'March 2026',
+    title: 'Cohort Completion Celebration',
+    program: 'Effective Communication & Presentation',
+    date: 'Mar 18, 2026',
+    location: 'Main Atrium',
+    image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=85',
+    category: 'Celebration',
+    caption: 'March 2026 cohort celebrating their completion of the communication series.',
+    views: 490,
+    likes: 124
   }
 ];
 
@@ -522,7 +648,7 @@ export const INITIAL_EMAILS = [
     type: 'Broadcast',
     recipientEmail: 'all-employees@xyz.com',
     recipientName: 'All xyz Employees',
-    subject: '📢 TLCE 2026 Annual Program Calendar Now Open!',
+    subject: 'TLCE 2026 Annual Program Calendar Now Open!',
     preview: 'xyz Learning & Development Department is excited to unveil the full 2026 TLCE Program Calendar...',
     content: `<h2>xyz TLCE 2026 Annual Program Calendar</h2><p>Dear Colleague,</p><p>We are thrilled to announce our full-year 2026 TLCE Program Calendar! 12 flagship programs covering AI, Leadership, Communication, Finance, Innovation, and more.</p><p>Best regards,<br/><strong>xyz Learning and Development Department</strong></p>`,
     timestamp: '2026-07-28T08:00:00Z',
@@ -534,7 +660,7 @@ export const INITIAL_EMAILS = [
     type: 'Confirmation',
     recipientEmail: 'sarah.jenkins@xyz.com',
     recipientName: 'Sarah Jenkins',
-    subject: '✅ Registration Confirmed: AI Ready Mindset',
+    subject: 'Registration Confirmed: AI Ready Mindset',
     preview: 'Your seat for AI Ready Mindset is secured. Meal: Veg | Cab: Yes (City Tech Park)...',
     content: `<h2>Registration Confirmation</h2><p>Hi Sarah Jenkins,</p><p>You are successfully registered for <strong>AI Ready Mindset</strong>!</p><p>Regards,<br/>xyz Learning and Development Department</p>`,
     timestamp: '2026-07-28T09:30:00Z',

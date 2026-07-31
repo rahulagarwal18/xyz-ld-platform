@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLD } from '../context/LDContext';
-import { ArrowRight, ChevronLeft, ChevronRight, Calendar, Clock, MapPin, Users, Award } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, Calendar, Clock, MapPin, Users, Award, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 const FEATURED_IDS = ['tlce-jan', 'tlce-apr', 'tlce-may', 'tlce-nov'];
 
@@ -153,8 +153,8 @@ export const BannerCarousel = ({ onSelectConference }) => {
               borderRadius: 999, transition: 'width 0.6s ease'
             }} />
           </div>
-          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.75)', fontWeight: 600 }}>
-            {isFull ? '🔴 Fully booked' : `🟢 ${seatsLeft} seats remaining (${pct}% filled)`}
+          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.75)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+            {isFull ? <><AlertCircle size={12} color="var(--n-red)" /> Fully booked</> : <><CheckCircle2 size={12} color="#10B981" /> {seatsLeft} seats remaining ({pct}% filled)</>}
           </div>
         </div>
 

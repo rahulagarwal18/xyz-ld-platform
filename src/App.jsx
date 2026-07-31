@@ -5,6 +5,7 @@ import { BannerCarousel } from './components/BannerCarousel';
 import { HeadcountDashboard } from './components/HeadcountDashboard';
 import { ConferenceList } from './components/ConferenceList';
 import { TLCECalendar } from './components/TLCECalendar';
+import { GalleryView } from './components/GalleryView';
 import { RegistrationModal } from './components/RegistrationModal';
 import { EmailInboxDrawer } from './components/EmailInboxDrawer';
 import { ChatBot } from './components/ChatBot';
@@ -16,7 +17,7 @@ import { ShieldCheck } from 'lucide-react';
 
 const MainApp = () => {
   const { currentUser } = useLD();
-  const [activeTab, setActiveTab] = useState('programs'); // 'programs' | 'calendar' | 'analytics'
+  const [activeTab, setActiveTab] = useState('programs'); // 'programs' | 'calendar' | 'gallery' | 'analytics'
   const [selectedConferenceForReg, setSelectedConferenceForReg] = useState(null);
   const [isEmailInboxOpen, setIsEmailInboxOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -29,6 +30,7 @@ const MainApp = () => {
   const TAB_LABELS = {
     programs: 'TLCE Programs',
     calendar: 'Annual Calendar',
+    gallery: 'Event Photo Gallery',
     analytics: 'Analytics & Roster'
   };
 
@@ -86,30 +88,31 @@ const MainApp = () => {
         {activeTab === 'calendar' && (
           <TLCECalendar onSelectConference={(conf) => setSelectedConferenceForReg(conf)} />
         )}
+        {activeTab === 'gallery' && (
+          <GalleryView />
+        )}
         {activeTab === 'analytics' && (
           <HeadcountDashboard onOpenRegistrationModal={(conf) => setSelectedConferenceForReg(conf)} />
         )}
+
       </main>
 
       {/* Footer */}
       <footer style={{
-        background: 'var(--grad-navy)', padding: '20px 32px',
-        borderTop: '3px solid rgba(0,156,222,0.4)'
+        background: 'var(--n-navy-dark)', borderTop: '1px solid rgba(255,255,255,0.1)',
+        padding: '24px', color: 'rgba(255,255,255,0.6)', fontSize: 12, textAlign: 'center',
+        marginTop: 'auto'
       }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ fontSize: 18, fontWeight: 900, color: '#fff', letterSpacing: 1 }}>xyz</span>
-            <span style={{ color: 'rgba(255,255,255,0.4)' }}>|</span>
-            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', fontWeight: 600, letterSpacing: 0.5 }}>
-              Learning and Development Department
-            </span>
-            <span style={{
-              fontSize: 10, padding: '3px 10px', borderRadius: 999,
-              background: 'rgba(0,156,222,0.3)', color: '#fff', fontWeight: 700, border: '1px solid rgba(0,156,222,0.4)'
-            }}>TLCE LMS</span>
+        <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+          <div>
+            <strong style={{ color: '#fff' }}>xyz TLCE LMS</strong> — Learning &amp; Development Department © 2026
           </div>
-          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>
-            Logged in as <strong style={{ color: '#fff' }}>{currentUser.name}</strong> · {currentUser.role}
+          <div style={{ display: 'flex', gap: 16 }}>
+            <span>Privacy Policy</span>
+            <span>·</span>
+            <span>Terms of Service</span>
+            <span>·</span>
+            <span>Support: admin@xyz.com</span>
           </div>
         </div>
       </footer>
@@ -126,10 +129,15 @@ const MainApp = () => {
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
       <ChatBot />
       <Toast />
+
     </div>
   );
 };
 
 export default function App() {
-  return (<LDProvider><MainApp /></LDProvider>);
+  return (
+    <LDProvider>
+      <MainApp />
+    </LDProvider>
+  );
 }
