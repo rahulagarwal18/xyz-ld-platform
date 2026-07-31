@@ -91,7 +91,7 @@ const MainApp = () => {
         {activeTab === 'gallery' && (
           <GalleryView />
         )}
-        {activeTab === 'analytics' && (
+        {activeTab === 'analytics' && currentUser?.role === 'Admin' && (
           <HeadcountDashboard onOpenRegistrationModal={(conf) => setSelectedConferenceForReg(conf)} />
         )}
 

@@ -6,11 +6,13 @@ export const Header = ({ activeTab, setActiveTab, onOpenEmailInbox, onOpenCreate
   const { currentUser, logoutUser, emails } = useLD();
   const unreadEmailCount = emails.filter(e => !e.read).length;
 
+  const isAdmin = currentUser?.role === 'Admin';
+
   const TABS = [
     { id: 'programs', label: 'TLCE Programs', icon: LayoutGrid },
     { id: 'calendar', label: 'Annual Calendar', icon: Calendar },
     { id: 'gallery', label: 'Gallery', icon: Image },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    ...(isAdmin ? [{ id: 'analytics', label: 'Analytics', icon: BarChart3 }] : []),
   ];
 
   return (
