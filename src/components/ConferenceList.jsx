@@ -26,7 +26,22 @@ export const ConferenceList = ({ onSelectConference }) => {
   const categories = ['All', ...new Set(conferences.map(c => c.category))];
   const audiences = ['All', 'Engineering', 'Leadership', 'Product', 'HR', 'All Employees', 'Design', 'Finance'];
 
-  const getFallbackImg = () => 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=85';
+  const FALLBACK_MAP = {
+    'tlce-jan': 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=85',
+    'tlce-feb': 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=85',
+    'tlce-mar': 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=1200&q=85',
+    'tlce-apr': 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=85',
+    'tlce-may': 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1200&q=85',
+    'tlce-jun': 'https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&w=1200&q=85',
+    'tlce-jul': 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=85',
+    'tlce-aug': 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=85',
+    'tlce-sep': 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=85',
+    'tlce-oct': 'https://images.unsplash.com/photo-1531497865144-0464ef8fb9a9?auto=format&fit=crop&w=1200&q=85',
+    'tlce-nov': 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=85',
+    'tlce-dec': 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=85',
+  };
+
+  const getFallbackImg = (id) => FALLBACK_MAP[id] || 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=85';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -115,9 +130,9 @@ export const ConferenceList = ({ onSelectConference }) => {
               {/* Card Image */}
               <div style={{ position: 'relative', height: 160, overflow: 'hidden', background: '#ddd' }}>
                 <img
-                  src={conf.image || getFallbackImg()}
+                  src={conf.image || getFallbackImg(conf.id)}
                   alt={conf.title}
-                  onError={e => { e.target.onerror = null; e.target.src = getFallbackImg(); }}
+                  onError={e => { e.target.onerror = null; e.target.src = getFallbackImg(conf.id); }}
                   style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }}
                 />
                 {/* Overlays */}

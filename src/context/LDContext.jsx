@@ -23,7 +23,7 @@ export const LDProvider = ({ children }) => {
   });
 
   const [conferences, setConferences] = useState(() => {
-    const VKEY = 'xyz_conferences_v5_reset';
+    const VKEY = 'xyz_conferences_v6_unique_img_reset';
     const isUpToDate = localStorage.getItem(VKEY) === 'true';
 
     if (!isUpToDate) {
