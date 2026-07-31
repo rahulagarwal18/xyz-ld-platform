@@ -5,18 +5,18 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-/* --- Premium Executive Brand Palette --- */
+/* --- Modern Tech Indigo-Slate Brand Palette --- */
 :root {
-  --n-navy:        #1E3A8A; /* Deep Royal Blue */
-  --n-navy-dark:   #0F172A; /* Midnight Slate */
-  --n-navy-light:  #2563EB; /* Sapphire Blue */
-  --n-red:         #EF4444; /* Coral Red */
-  --n-red-dark:    #B91C1C; /* Deep Crimson */
-  --n-blue:        #3B82F6; /* Bright Sapphire/Blue */
-  --n-blue-light:  #60A5FA; /* Light Sapphire */
-  --n-blue-pale:   #EFF6FF; /* Soft Pale Sapphire */
-  --n-gray-dark:   #1E293B; /* Slate 800 */
-  --n-gray-mid:    #64748B; /* Slate 500 */
+  --n-navy:        #4F46E5; /* Premium Indigo */
+  --n-navy-dark:   #0B0F19; /* Midnight Charcoal */
+  --n-navy-light:  #6366F1; /* Vibrant Indigo */
+  --n-red:         #F43F5E; /* Modern Rose/Red */
+  --n-red-dark:    #BE123C; /* Deep Rose Red */
+  --n-blue:        #0EA5E9; /* Premium Sky Blue */
+  --n-blue-light:  #38BDF8; /* Light Sky Blue */
+  --n-blue-pale:   #F0F9FF; /* Soft Pale Sky */
+  --n-gray-dark:   #0F172A; /* Slate 900 */
+  --n-gray-mid:    #475569; /* Slate 600 */
   --n-gray-light:  #F8FAFC; /* Slate 50 */
   --n-gray-border: #E2E8F0; /* Slate 200 */
   --n-white:       #FFFFFF;
@@ -24,14 +24,14 @@
   --n-success-bg:  #ECFDF5; /* Soft Emerald Pale */
   --n-warning:     #F59E0B; /* Warm Amber */
   --n-warning-bg:  #FEF3C7; /* Soft Amber Pale */
-  --n-error:       #EF4444; /* Soft Red */
-  --n-error-bg:    #FEF2F2; /* Soft Red Pale */
+  --n-error:       #F43F5E; /* Soft Rose */
+  --n-error-bg:    #FFF1F2; /* Soft Rose Pale */
 
   /* Gradient shorthands */
-  --grad-navy:  linear-gradient(135deg, var(--n-navy-dark) 0%, var(--n-navy) 60%, var(--n-navy-light) 100%);
+  --grad-navy:  linear-gradient(135deg, var(--n-navy-dark) 0%, #1E1B4B 60%, var(--n-navy) 100%);
   --grad-blue:  linear-gradient(135deg, var(--n-navy) 0%, var(--n-blue) 100%);
   --grad-red:   linear-gradient(135deg, var(--n-red-dark) 0%, var(--n-red) 100%);
-  --grad-hero:  linear-gradient(135deg, var(--n-navy-dark) 0%, var(--n-navy) 50%, var(--n-blue) 100%);
+  --grad-hero:  linear-gradient(135deg, var(--n-navy-dark) 0%, #1E1B4B 50%, var(--n-navy) 100%);
 
   /* Shadows */
   --shadow-sm:  0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
