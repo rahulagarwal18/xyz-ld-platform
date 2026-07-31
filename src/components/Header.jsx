@@ -3,6 +3,7 @@ import { useLD } from '../context/LDContext';
 import { Mail, Plus, LogOut, LayoutGrid, Calendar, Image, BarChart3, User } from 'lucide-react';
 
 export const Header = ({ activeTab, setActiveTab, onOpenEmailInbox, onOpenCreateModal }) => {
+  const { currentUser, logoutUser, emails } = useLD();
   const isAdmin = currentUser?.role === 'Admin';
   const myEmails = isAdmin
     ? emails
