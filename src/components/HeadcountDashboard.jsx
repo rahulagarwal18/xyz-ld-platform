@@ -8,7 +8,8 @@ export const HeadcountDashboard = ({ onOpenRegistrationModal }) => {
   const {
     conferences, registrations, currentUser,
     checkInAttendee, completeEventAutomations, markNonAttendance,
-    getTotalLearningHours, toggleAssessment, assessmentResults, feedbackResponses
+    getTotalLearningHours, toggleAssessment, assessmentResults, feedbackResponses,
+    clearAllRegistrations
   } = useLD();
 
   const [selectedConfId, setSelectedConfId] = useState(conferences[0]?.id || '');
@@ -48,7 +49,7 @@ export const HeadcountDashboard = ({ onOpenRegistrationModal }) => {
             TLCE Program Headcount Report
           </h2>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
           <Filter size={16} color="var(--n-navy)" />
           <select
             className="form-input resp-dashboard-select-input"
@@ -60,6 +61,17 @@ export const HeadcountDashboard = ({ onOpenRegistrationModal }) => {
               <option key={c.id} value={c.id}>{c.title} ({c.registeredCount}/{c.totalSeats})</option>
             ))}
           </select>
+          <button
+            onClick={() => {
+              if (window.confirm('Reset all registrations to test fresh enrollment?')) {
+                clearAllRegistrations();
+              }
+            }}
+            className="btn btn-secondary btn-sm"
+            style={{ fontSize: 12, fontWeight: 700, background: '#FFF1F2', color: '#E11D48', border: '1px solid #FECDD3' }}
+          >
+            Reset All Registrations
+          </button>
         </div>
       </div>
  

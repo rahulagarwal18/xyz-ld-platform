@@ -48,8 +48,14 @@ export const LDProvider = ({ children }) => {
   });
 
   const [registrations, setRegistrations] = useState(() => {
+    const REG_KEY = 'xyz_registrations_v7_clear_all';
+    if (localStorage.getItem(REG_KEY) !== 'true') {
+      localStorage.removeItem('xyz_registrations');
+      localStorage.setItem(REG_KEY, 'true');
+      return [];
+    }
     const saved = localStorage.getItem('xyz_registrations');
-    return saved ? JSON.parse(saved) : INITIAL_REGISTRATIONS;
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [emails, setEmails] = useState(() => {
@@ -518,6 +524,12 @@ export const LDProvider = ({ children }) => {
     setEmails(prev => prev.map(e => e.id === emailId ? { ...e, read: true } : e));
   };
 
+  const clearAllRegistrations = () => {
+    setRegistrations([]);
+    localStorage.setItem('xyz_registrations', JSON.stringify([]));
+    showToast('All program registrations cleared! All events open to register.', 'success');
+  };
+
   return (
     <LDContext.Provider value={{
       USERS: users,
@@ -532,6 +544,7 @@ export const LDProvider = ({ children }) => {
       completeEventAutomations, addNewConference,
       submitAssessment, toggleAssessment,
       submitFeedback, markEmailRead,
+      clearAllRegistrations,
       getTotalLearningHours, getUserLearningHours
     }}>
       {children}
