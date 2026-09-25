@@ -530,6 +530,20 @@ export const LDProvider = ({ children }) => {
     showToast('All program registrations cleared! All events open to register.', 'success');
   };
 
+  const deregisterUser = (registrationId) => {
+    const targetReg = registrations.find(r => r.id === registrationId);
+    if (!targetReg) return;
+
+    setRegistrations(prev => prev.filter(r => r.id !== registrationId));
+    setConferences(prev => prev.map(c =>
+      c.id === targetReg.conferenceId
+        ? { ...c, registeredCount: Math.max(0, c.registeredCount - 1) }
+        : c
+    ));
+
+    showToast(`Deregistered ${targetReg.userName}! Seat freed up for registration.`, 'info');
+  };
+
   return (
     <LDContext.Provider value={{
       USERS: users,
@@ -539,7 +553,7 @@ export const LDProvider = ({ children }) => {
       groqApiKey, toast,
       showToast, dispatchEmail,
       registerNewAccount, loginUser, logoutUser,
-      registerForConference, addToWaitlist,
+      registerForConference, addToWaitlist, deregisterUser,
       checkInAttendee, markNonAttendance,
       completeEventAutomations, addNewConference,
       submitAssessment, toggleAssessment,

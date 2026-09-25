@@ -34,7 +34,7 @@ const ToggleSwitch = ({ checked, onChange }) => (
 );
 
 export const RegistrationModal = ({ conference, onClose }) => {
-  const { currentUser, registerForConference, addToWaitlist, registrations } = useLD();
+  const { currentUser, registerForConference, addToWaitlist, registrations, deregisterUser } = useLD();
 
   const [userName, setUserName]               = useState(currentUser?.name || '');
   const [userEmail, setUserEmail]             = useState(currentUser?.email || '');
@@ -155,8 +155,21 @@ export const RegistrationModal = ({ conference, onClose }) => {
                 </div>
               </div>
             </div>
-            <div style={{ marginTop: 16, textAlign: 'right' }}>
-              <button className="btn btn-secondary" onClick={onClose}>Close</button>
+            <div style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <button
+                className="btn btn-secondary btn-sm"
+                onClick={() => {
+                  const userReg = registrations.find(r => r.conferenceId === conference.id && r.userEmail === currentUser?.email);
+                  if (userReg && window.confirm(`Cancel your registration for ${conference.title}?`)) {
+                    deregisterUser(userReg.id);
+                    onClose();
+                  }
+                }}
+                style={{ fontSize: 12, color: '#E11D48', border: '1px solid #FECDD3', background: '#FFF1F2' }}
+              >
+                Cancel / Deregister My Seat
+              </button>
+              <button className="btn btn-secondary btn-sm" onClick={onClose}>Close</button>
             </div>
           </div>
 

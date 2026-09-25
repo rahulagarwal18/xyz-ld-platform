@@ -9,7 +9,7 @@ export const HeadcountDashboard = ({ onOpenRegistrationModal }) => {
     conferences, registrations, currentUser,
     checkInAttendee, completeEventAutomations, markNonAttendance,
     getTotalLearningHours, toggleAssessment, assessmentResults, feedbackResponses,
-    clearAllRegistrations
+    clearAllRegistrations, deregisterUser
   } = useLD();
 
   const [selectedConfId, setSelectedConfId] = useState(conferences[0]?.id || '');
@@ -247,6 +247,21 @@ export const HeadcountDashboard = ({ onOpenRegistrationModal }) => {
                           style={{ fontSize: 11 }}
                         >
                           <UserX size={11} /> Absent
+                        </button>
+                      )}
+                      {/* Deregister / Cancel */}
+                      {currentUser?.role === 'Admin' && (
+                        <button
+                          className="btn btn-secondary btn-sm"
+                          onClick={() => {
+                            if (window.confirm(`Deregister ${reg.userName} from ${currentConf?.title}?`)) {
+                              deregisterUser(reg.id);
+                            }
+                          }}
+                          style={{ fontSize: 11, background: '#FFF1F2', color: '#E11D48', border: '1px solid #FECDD3' }}
+                          title="Deregister attendee & free seat"
+                        >
+                          Deregister
                         </button>
                       )}
                     </div>
